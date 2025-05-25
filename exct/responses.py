@@ -566,7 +566,7 @@ async def checkReplies(messageData: str, message: discord.Message) -> None:
 		return
 
 	elif "/add" in messageData: #@Un-Pingable
-		await sendMessage(message, "https://github.com/dau4096/DThree-Source¬https://github.com/dau4096/DThree-Files")
+		await sendMessage(message, "https://github.com/dau4096/DThree-Source \n https://github.com/dau4096/DThree-Files")
 		return
 
 	
