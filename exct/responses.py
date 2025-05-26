@@ -10,8 +10,8 @@ import pandas as pd
 import numpy as np
 import random
 from exct.shared import sendMessage, replyMessage, getTime, timeSinceStr, secondsSince
-
-kill = 0
+from exct.solver import solveEqu
+import math as maths
 
 
 global invalidDates
@@ -476,6 +476,15 @@ async def checkReplies(messageData: str, message: discord.Message) -> None:
 		finalMessage += "\n```"
 
 		await replyMessage(message, finalMessage, ping=True)
+		return
+
+	elif messageData.startswith("/solve"):
+		result = solveEqu(messageData)
+		if (maths.isnan(result[1])):
+			await replyMessage(message, result[0], ping=True)
+			return
+		equ = messageData.replace("/solve ", "").strip().replace(" ", "").lower()
+		await replyMessage(message, f"{equ} = {result[1]}", ping=True)
 		return
 
 
