@@ -16,12 +16,12 @@ operatorPrecedence = {
 	"^": 3
 }
 opFuncs = {
-    "+": operator.add,
-    "-": operator.sub,
-    "*": operator.mul,
-    "/": operator.truediv,
-    "^": operator.pow,
-    "%": operator.mod
+	"+": operator.add,
+	"-": operator.sub,
+	"*": operator.mul,
+	"/": operator.truediv,
+	"^": operator.pow,
+	"%": operator.mod
 }
 
 
@@ -59,42 +59,45 @@ def solveEqu(messageData: str) -> tuple[str, float]:
 		opSep = opSep.replace(op, "|")
 	opSep = opSep.split("|")
 
-	operands = []
 	operandsVerbose = [toFloat(value) for value in opSep]
-	for value in operandsVerbose:
-		if maths.isnan(value[1]):
-			return ("Equation is not solvable: " + value[0], maths.nan)
-	operands.append(value[1])
+	thisOperands = []
+	for op in operandsVerbose:
+		if maths.isnan(op[1]):
+			return ("Equation is not solvable: " + op[0], maths.nan)
+		thisOperands.append(op[1])
 
 
-	operators = []
+	thisOperators = []
 	for op in equ:
-		if op in operators: operators.append(op)
+		if op in operatorsStr: thisOperators.append(op)
 
 	precList = {}
-	for idx, op in enumerate(operators):
+	for idx, op in enumerate(thisOperators):
 		precList[idx] = operatorPrecedence[op]
 
 	precListSorted = {k: v for k, v in sorted(precList.items(), key=lambda item: item[1], reverse=True)}
 
-
+	operands = thisOperands[:]
+	operators = thisOperators[:]
 	for precOpIdx in sorted(precListSorted, key=lambda k: precListSorted[k], reverse=True):
-	    maxPrec = max(operatorPrecedence[op] for op in operators)
-	    for i, op in enumerate(operators):
-	        if operatorPrecedence[op] == maxPrec:
-	            func = opFuncs[op]
-	            left = operands[i]
-	            right = operands[i + 1]
-	            try:
-	                result = func(left, right)
-	            except Exception as e:
-	                print(f"Error performing {left} {op} {right}: {e}")
-	                result = maths.inf
+		maxPrec = max(operatorPrecedence[op] for op in operators)
+		for i, op in enumerate(operators):
+			if operatorPrecedence[op] == maxPrec:
+				func = opFuncs[op]
+				left = operands[i]
+				right = operands[i + 1]
+				try:
+					result = func(left, right)
+				except Exception as e:
+					print(f"Error performing {left} {op} {right}: {e}")
+					result = maths.inf
 
-	            operands[i] = result
-	            del operands[i + 1]
-	            del operators[i]
-	            break
+				operands[i] = result
+				del operands[i + 1]
+				del operators[i]
+				break
 	
 
-	return ("Solved successfully:", operands[0])
+	result = operands[0]
+	if result == maths.floor(result): result = int(result)
+	return ("Solved successfully:", result)

@@ -480,6 +480,8 @@ async def checkReplies(messageData: str, message: discord.Message) -> None:
 
 	elif messageData.startswith("/solve"):
 		result = solveEqu(messageData)
+		await replyMessage(message, str(result), ping=True)
+		return
 		if (maths.isnan(result[1])):
 			await replyMessage(message, result[0], ping=True)
 			return
