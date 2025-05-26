@@ -4,9 +4,9 @@ import operator
 
 
 constants = {
-	"pi": maths.pi, "π": maths.pi,
-	"e": maths.e, "exp": maths.e,
-	"tau": maths.tau, "τ": maths.tau,
+	"pi": maths.pi,
+	"e": maths.e,
+	"tau": maths.tau,
 	"inf": maths.inf
 }
 operatorsStr = "+-*/^%"
