@@ -45,8 +45,47 @@ def toFloat(value: str) -> tuple[str, float]:
 		return ("Unknown numerical value: " + value, maths.nan)
 
 
+def tokenise(expr: str) -> list[str]:
+	tokens = []
+	i = 0
+	while i < len(expr):
+		ch = expr[i]
 
-#messageData = "/solve 3.7+2%2"
+		if ch in "+*/^%":
+			tokens.append(ch)
+			i += 1
+
+		elif ch == '-':
+			if i == 0 or expr[i - 1] in "+-*/^%":
+				j = i + 1
+				while j < len(expr) and (expr[j].isdigit() or expr[j] == '.' or expr[j] == 'e'):
+					j += 1
+				tokens.append(expr[i:j])
+				i = j
+			else:
+				tokens.append('-')
+				i += 1
+
+		elif ch.isdigit() or ch == '.':
+			j = i
+			while j < len(expr) and (expr[j].isdigit() or expr[j] == '.' or expr[j] == 'e' or expr[j] == '-'):
+				j += 1
+			tokens.append(expr[i:j])
+			i = j
+
+		elif ch.isalpha():
+			j = i
+			while j < len(expr) and expr[j].isalpha():
+				j += 1
+			tokens.append(expr[i:j])
+			i = j
+
+		else:
+			i += 1
+	return tokens
+
+
+
 def solveEqu(messageData: str) -> tuple[str, float]:
 	equ = messageData.replace("/solve ", "").strip().replace(" ", "").lower()
 
@@ -54,22 +93,17 @@ def solveEqu(messageData: str) -> tuple[str, float]:
 	if regex.search(r"-?(?:\d+(?:\.\d*)?|\.\d+)(?:e-?(?:\d+(?:\.\d*)?|\.\d+))?(?:[\+\-\*\/\^%]-?(?:\d+(?:\.\d*)?|\.\d+)(?:e-?(?:\d+(?:\.\d*)?|\.\d+))?)*", equ) is None:
 		return ("Equation is not solvable", maths.nan)
 
-	opSep = equ
-	for op in operatorsStr:
-		opSep = opSep.replace(op, "|")
-	opSep = opSep.split("|")
-
-	operandsVerbose = [toFloat(value) for value in opSep]
+	tokens = tokenise(equ)
 	thisOperands = []
-	for op in operandsVerbose:
-		if maths.isnan(op[1]):
-			return ("Equation is not solvable: " + op[0], maths.nan)
-		thisOperands.append(op[1])
-
-
 	thisOperators = []
-	for op in equ:
-		if op in operatorsStr: thisOperators.append(op)
+	for token in tokens:
+		if token in operatorsStr:
+			thisOperators.append(token)
+		else:
+			msg, val = toFloat(token)
+			if maths.isnan(val):
+				return (f"Invalid operand: {msg}", maths.nan)
+			thisOperands.append(val)
 
 	precList = {}
 	for idx, op in enumerate(thisOperators):
