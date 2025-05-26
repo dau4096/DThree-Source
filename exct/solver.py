@@ -23,11 +23,24 @@ opFuncs = {
 	"^": operator.pow,
 	"%": operator.mod
 }
+mathFunctions = {
+	"sin": maths.sin,
+	"cos": maths.cos,
+	"tan": maths.tan,
+	"asin": maths.asin,
+	"acos": maths.acos,
+	"atan": maths.atan,
+	"sqrt": maths.sqrt,
+	"abs": abs,
+	"ln": maths.log,
+	"log": maths.log10,
+	"exp": maths.exp
+}
 
 
 def toFloat(value: str) -> tuple[str, float]:
 	if value in constants:
-		return constants[value]
+		return ("Successfully converted value", constants[value])
 	elif regex.search(r"-?[0-9]+.?[0.9]*e-?[0-9]+.?[0-9]*", value) is not None:
 		#In format 3.4e-7 or similar.
 		splitV = value.split("e")
@@ -51,14 +64,14 @@ def tokenise(expr: str) -> list[str]:
 	while i < len(expr):
 		ch = expr[i]
 
-		if ch in "+*/^%":
+		if ch in operatorsStr:
 			tokens.append(ch)
 			i += 1
 
 		elif ch == '-':
-			if i == 0 or expr[i - 1] in "+-*/^%":
+			if i == 0 or expr[i - 1] in operatorsStr + '(':
 				j = i + 1
-				while j < len(expr) and (expr[j].isdigit() or expr[j] == '.' or expr[j] == 'e'):
+				while j < len(expr) and (expr[j].isdigit() or expr[j] in '.e'):
 					j += 1
 				tokens.append(expr[i:j])
 				i = j
@@ -68,7 +81,7 @@ def tokenise(expr: str) -> list[str]:
 
 		elif ch.isdigit() or ch == '.':
 			j = i
-			while j < len(expr) and (expr[j].isdigit() or expr[j] == '.' or expr[j] == 'e' or expr[j] == '-'):
+			while j < len(expr) and (expr[j].isdigit() or expr[j] in '.e-'):
 				j += 1
 			tokens.append(expr[i:j])
 			i = j
@@ -77,11 +90,24 @@ def tokenise(expr: str) -> list[str]:
 			j = i
 			while j < len(expr) and expr[j].isalpha():
 				j += 1
-			tokens.append(expr[i:j])
+			fn_name = expr[i:j]
 			i = j
+			if i < len(expr) and expr[i] == '(':
+				bracket_depth = 1
+				i += 1
+				start_arg = i
+				while i < len(expr) and bracket_depth > 0:
+					if expr[i] == '(': bracket_depth += 1
+					elif expr[i] == ')': bracket_depth -= 1
+					i += 1
+				arg_expr = expr[start_arg:i-1]
+				tokens.append((fn_name, arg_expr))
+			else:
+				tokens.append(fn_name)
 
 		else:
 			i += 1
+
 	return tokens
 
 
@@ -90,15 +116,26 @@ def solveEqu(messageData: str) -> tuple[str, float]:
 	equ = messageData.replace("/solve ", "").strip().replace(" ", "").lower()
 
 	#Horrific regex.
-	if regex.search(r"-?(?:\d+(?:\.\d*)?|\.\d+)(?:e-?(?:\d+(?:\.\d*)?|\.\d+))?(?:[\+\-\*\/\^%]-?(?:\d+(?:\.\d*)?|\.\d+)(?:e-?(?:\d+(?:\.\d*)?|\.\d+))?)*", equ) is None:
+	if regex.search(r"^([-+*/%^()\d\.e]+|[a-zA-Z_]+\([-+*/%^()\d\.e]+\)|[a-zA-Z_]+)+$", equ) is None:
 		return ("Equation is not solvable", maths.nan)
 
 	tokens = tokenise(equ)
 	thisOperands = []
 	thisOperators = []
 	for token in tokens:
-		if token in operatorsStr:
+		if isinstance(token, tuple):
+			fnName, argExpr = token
+			if fnName in mathFunctions:
+				msg, argVal = solveEqu(argExpr)
+				if maths.isnan(argVal):
+					return (f"Invalid argument in {fnName}: {msg}", maths.nan)
+				thisOperands.append(mathFunctions[fnName](argVal))
+			else:
+				return (f"Unknown function: {fnName}", maths.nan)
+
+		elif token in operatorsStr:
 			thisOperators.append(token)
+
 		else:
 			msg, val = toFloat(token)
 			if maths.isnan(val):
@@ -120,6 +157,8 @@ def solveEqu(messageData: str) -> tuple[str, float]:
 				func = opFuncs[op]
 				left = operands[i]
 				right = operands[i + 1]
+				if (right == 0) and (func == operator.truediv):
+					return ("Equation is not solvable: [error] Division by Zero", maths.nan)
 				try:
 					result = func(left, right)
 				except Exception as e:
