@@ -49,7 +49,7 @@ def secondsSince(dateStr: str) -> int:
 
 
 
-def formatNumber(num: int|float, seperator: str=",", delimiter: str=".") -> str:
+def formatNumber(num: int|float, seperator: str=",", delimiter: str=".", rounding: int=2) -> str:
 	"""
 	Formats a number, for econ.py
 	The seperator lies between every set of 3 digits.
@@ -57,7 +57,7 @@ def formatNumber(num: int|float, seperator: str=",", delimiter: str=".") -> str:
 	"""
 	formatted = ""
 	if isinstance(num, float):
-		formatted = f"{num:,.2f}"
+		formatted = f"{num:,.{rounding}f}"
 	else:
 		formatted = f"{num:,}"
 

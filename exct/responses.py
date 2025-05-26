@@ -484,7 +484,7 @@ async def checkReplies(messageData: str, message: discord.Message) -> None:
 			await replyMessage(message, result[0], ping=True)
 			return
 		equ = messageData.replace("/solve ", "").strip().replace(" ", "").lower()
-		await replyMessage(message, f"{equ} = {formatNumber(result[1])}", ping=True)
+		await replyMessage(message, f"{equ} = {formatNumber(result[1], seperator=',', delimiter='.', rounding=4)}", ping=True)
 		return
 
 
