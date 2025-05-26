@@ -483,8 +483,14 @@ async def checkReplies(messageData: str, message: discord.Message) -> None:
 		if (maths.isnan(result[1])):
 			await replyMessage(message, result[0], ping=True)
 			return
+
+		elif (maths.isinf(result[1])):
+			formatted = ("-" if result[1]<0.0 else "") + "1.8e308"
+		else:
+			formatted = formatNumber(result[1], seperator=',', delimiter='.', rounding=4)
+
 		equ = messageData.replace("/solve ", "").strip().replace(" ", "").lower()
-		await replyMessage(message, f"{equ} = {formatNumber(result[1], seperator=',', delimiter='.', rounding=4)}", ping=True)
+		await replyMessage(message, f"{equ} = {formatted}", ping=True)
 		return
 
 

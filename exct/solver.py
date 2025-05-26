@@ -129,7 +129,10 @@ def solveEqu(messageData: str) -> tuple[str, float]:
 				msg, argVal = solveEqu(argExpr)
 				if maths.isnan(argVal):
 					return (f"Invalid argument in {fnName}: {msg}", maths.nan)
-				thisOperands.append(mathsFunctions[fnName](argVal))
+				fn = mathsFunctions[fnName]
+				if (fn == maths.sqrt) and (argVal < 0.0):
+					return ("Equation is not solvable: Complex numbers are not permitted.", maths.nan)
+				thisOperands.append(fn(argVal))
 			else:
 				return (f"Unknown function: {fnName}", maths.nan)
 
@@ -156,11 +159,13 @@ def solveEqu(messageData: str) -> tuple[str, float]:
 			if operatorPrecedence[op] == maxPrec:
 				func = opFuncs[op]
 				left = operands[i]
-				right = operands[i + 1]
+				if (i+1 < len(operands)):
+					right = operands[i + 1]
+				else:
+					right = left
+					left = 0.0
 				if (right == 0) and (func == operator.truediv):
 					return ("Equation is not solvable: [error] Division by Zero", maths.nan)
-				elif (left <= 0) and (func == maths.sqrt):
-					return ("Equation is not solvable: Complex numbers are not permitted.", maths.nan)
 				try:
 					result = func(left, right)
 				except Exception as e:
@@ -168,7 +173,8 @@ def solveEqu(messageData: str) -> tuple[str, float]:
 					result = maths.inf
 
 				operands[i] = result
-				del operands[i + 1]
+				if (i+1 < len(operands)):
+					del operands[i + 1]
 				del operators[i]
 				break
 	
