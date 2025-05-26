@@ -159,6 +159,8 @@ def solveEqu(messageData: str) -> tuple[str, float]:
 				right = operands[i + 1]
 				if (right == 0) and (func == operator.truediv):
 					return ("Equation is not solvable: [error] Division by Zero", maths.nan)
+				elif (left <= 0) and (func == maths.sqrt):
+					return ("Equation is not solvable: Complex numbers are not permitted.", maths.nan)
 				try:
 					result = func(left, right)
 				except Exception as e:
@@ -172,5 +174,8 @@ def solveEqu(messageData: str) -> tuple[str, float]:
 	
 
 	result = operands[0]
-	if result == maths.floor(result): result = int(result)
+	try:
+		if result == maths.floor(result): result = int(result)
+	except ValueError:
+		pass
 	return ("Solved successfully:", result)
