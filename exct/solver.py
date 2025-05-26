@@ -23,7 +23,7 @@ opFuncs = {
 	"^": operator.pow,
 	"%": operator.mod
 }
-mathFunctions = {
+mathsFunctions = {
 	"sin": maths.sin,
 	"cos": maths.cos,
 	"tan": maths.tan,
@@ -125,11 +125,11 @@ def solveEqu(messageData: str) -> tuple[str, float]:
 	for token in tokens:
 		if isinstance(token, tuple):
 			fnName, argExpr = token
-			if fnName in mathFunctions:
+			if fnName in mathsFunctions:
 				msg, argVal = solveEqu(argExpr)
 				if maths.isnan(argVal):
 					return (f"Invalid argument in {fnName}: {msg}", maths.nan)
-				thisOperands.append(mathFunctions[fnName](argVal))
+				thisOperands.append(mathsFunctions[fnName](argVal))
 			else:
 				return (f"Unknown function: {fnName}", maths.nan)
 
