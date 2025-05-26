@@ -9,7 +9,7 @@ from cycler import cycler
 import pandas as pd
 import numpy as np
 import random
-from exct.shared import sendMessage, replyMessage, getTime, timeSinceStr, secondsSince
+from exct.shared import sendMessage, replyMessage, getTime, timeSinceStr, secondsSince, formatNumber
 from exct.solver import solveEqu
 import math as maths
 
@@ -484,7 +484,7 @@ async def checkReplies(messageData: str, message: discord.Message) -> None:
 			await replyMessage(message, result[0], ping=True)
 			return
 		equ = messageData.replace("/solve ", "").strip().replace(" ", "").lower()
-		await replyMessage(message, f"{equ} = {result[1]}", ping=True)
+		await replyMessage(message, f"{equ} = {formatNumber(result[1])}", ping=True)
 		return
 
 

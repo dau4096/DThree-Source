@@ -1,6 +1,7 @@
 import re as regex
 import math as maths
 import operator
+from exct.shared import formatNumber
 
 
 constants = {
