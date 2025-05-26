@@ -89,7 +89,7 @@ def solveEqu(messageData: str) -> tuple[str, float]:
 				try:
 					result = func(left, right)
 				except Exception as e:
-					print(f"Error performing {left} {op} {right}: {e}")
+					return ("Equation is not solvable: [error] " + e, maths.nan)
 					result = maths.inf
 
 				operands[i] = result
