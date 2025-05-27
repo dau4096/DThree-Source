@@ -63,7 +63,7 @@ async def choiceCommand(messageData: str, message: discord.Message, fileName: st
 					#Manually log occurrence due to lack of use of shared.replyMessage()
 					logFile.write("\n" + f"{shared.getTime()} // {message.guild} // REPLY-IMAGE {message.author} // {imgFile}.png".replace('\n', ';'))
 			else:
-				await replyMessage(message, chosenLine.replace("Â¬", "\n").replace("¬", "\n") + "\n test thing, by howitzer", ping=True)
+				await replyMessage(message, chosenLine.replace("Â¬", "\n").replace("¬", "\n") + "\n Message may be negatively effected by current D3 testing performed by howitzer.", ping=True)
 				"""
 				"¬" is used to mark a newline in the text files.
 				"Â¬" occasionally occurs when files are read via the wrong format; this too is accounted for as a newline.
