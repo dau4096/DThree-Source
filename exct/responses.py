@@ -32,7 +32,7 @@ async def choiceCommand(messageData: str, message: discord.Message, fileName: st
 	"""
 	Used for handling commands such as "/dau" or "/howitzer".
 	If an image name is given, then it can randomly send an image of matching name.
-	Draws from [https://github.com/mrdau4096/DThree-Files].
+	Draws from [https://github.com/dau4096/DThree-Files].
 	"""
 	global previousChoices
 
@@ -506,7 +506,7 @@ async def checkReplies(messageData: str, message: discord.Message) -> None:
 					fileData = file.readlines()
 					vibeList = ''.join(["- "+vibe.split("¬")[0]+"\n" for vibe in fileData])
 					await replyMessage(message, vibeList, ping=True)
-				break
+				return
 		validResult = await choiceCommand(messageData, message, cmd.strip().lower())
 		if validResult: #End reply checking if resuult found.
 			return
