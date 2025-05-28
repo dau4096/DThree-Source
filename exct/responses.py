@@ -9,8 +9,9 @@ from cycler import cycler
 import pandas as pd
 import numpy as np
 import random
-from exct.shared import sendMessage, replyMessage, getTime, timeSinceStr, secondsSince, formatNumber
+from exct.shared import sendMessage, replyMessage, getTime, timeSinceStr, secondsSince, formatNumber, formatName
 from exct.solver import solveEqu
+from exct.vibe import showSongs
 import math as maths
 
 
@@ -276,38 +277,6 @@ async def occurrencesSaveGraph(word: str, message: discord.Message, filename: st
 
 #Other
 
-def reformatName(name: str, mpl: bool=False) -> str:
-	r"""
-	Another hacky fix for my username (dau -> __dau__ -> \_\_dau\_\_)
-	The underscores cause issues with discord formatting.
-	Used in showTotalWords() and showLeaderboard().
-	"""
-	reformatted = name.replace("_", "\_")
-	if mpl:
-		reformatted = f"${reformatted}$"
-	return reformatted
-
-
-def reformatNumber(value: int) -> str:
-	"""
-	Takes an integer value and re-formats it to fit the standard in showTotalWords() and showLeaderboard().
-	1000000 -> "1,000,000"
-	"""
-	reformattedNum = ""
-	strValue = str(value)
-	i, o = 0, 0
-	while True:
-		i += 1
-		reformattedNum += strValue[-i]
-		o += 1
-		if o % 3 == 0 and i != len(strValue):
-			reformattedNum += ","
-		if i == len(strValue):
-			break
-
-	return reformattedNum[::-1]
-
-
 async def showTotalWords(message: str) -> None:
 	"""
 	Called via /counttotal.
@@ -342,7 +311,7 @@ async def showTotalWords(message: str) -> None:
 	sortedList.sort()
 
 
-	reformattedTotal = reformatNumber(totalWords)
+	reformattedTotal = formatNumber(totalWords)
 
 
 	formatted = f"# Number of words spoken, per user (Of {reformattedTotal} total);\n"
@@ -353,7 +322,7 @@ async def showTotalWords(message: str) -> None:
 		counter = "words" if count != 1 else "word"
 		percent = round(100 * (count/totalWords), 2)
 		if percent < 0.01: continue
-		formatted += f"- **{reformatName(user)}:** {reformatNumber(count)} {counter} *({percent}%)*\n"
+		formatted += f"- **{reformatName(user)}:** {formatNumber(count)} {counter} *({percent}%)*\n"
 	formatted += "-# *Calculated based on values in wordOccurrences.csv*"
 
 
@@ -399,7 +368,7 @@ async def showLeaderboard(message: str) -> None:
 		highestUser = nameList[highestIndex]
 		th = "th" if index > 3 else "rd" if index == 3 else "nd" if index == 2 else "st" if index == 1 else "Nil"
 		counter = "word" if highestNumber == 1 else "words"
-		formatted += f"{index}{th} Place; ***{reformatName(highestUser)},*** *with {reformatNumber(highestNumber)} {counter}.*\n"
+		formatted += f"{index}{th} Place; ***{formatName(highestUser)},*** *with {formatNumber(highestNumber)} {counter}.*\n"
 	formatted += "-# *Calculated based on values in wordOccurrences.csv*"
 
 
@@ -500,16 +469,13 @@ async def checkReplies(messageData: str, message: discord.Message) -> None:
 	with open("/opt/render/project/src/textFiles/cmds.txt", "r") as cmdFile:
 		commands = [cmd.strip().lower() for cmd in cmdFile.readlines()]
 	for cmd in commands:
-		if cmd == "vibe":
-			if messageData.startswith("/vibe list"):
-				with open(f"/opt/render/project/src/textFiles/phrases/vibe.txt", "r", encoding="utf-8") as file:
-					fileData = file.readlines()
-					vibeList = ''.join(["- "+vibe.split("¬")[0]+"\n" for vibe in fileData])
-					await replyMessage(message, vibeList, ping=True)
-				return
 		validResult = await choiceCommand(messageData, message, cmd.strip().lower())
 		if validResult: #End reply checking if resuult found.
 			return
+
+
+	if messageData.startswith("/vibe"):
+		await showSongs(message, messageData)
 
 
 	

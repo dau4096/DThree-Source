@@ -157,6 +157,18 @@ def removeNonASCII(text: str) -> str:
 	return ''.join(char for char in text if ord(char) < 128)
 
 
+def formatName(name: str, mpl: bool=False) -> str:
+	r"""
+	Another hacky fix for my username (dau -> __dau__ -> \_\_dau\_\_)
+	The underscores cause issues with discord formatting.
+	Used in showTotalWords() and showLeaderboard().
+	"""
+	reformatted = name.replace("_", "\_")
+	if mpl:
+		reformatted = f"${reformatted}$"
+	return reformatted
+
+
 
 async def sendMessageInChannel(client: discord.Client, text: str, guild: str, channel: str) -> None:
 	"""
