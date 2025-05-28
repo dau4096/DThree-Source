@@ -6,7 +6,7 @@ from exct.shared import replyMessage, formatName
 
 #Genre: Metal/Rock -> ["metal", "rock"]
 global multiAttribSplitChar, nameList
-multiAttribSplitChar = "/"
+multiAttribSplitChar = ";"
 
 nameList = {
 	"dau": "__dau__", "d": "__dau__",
