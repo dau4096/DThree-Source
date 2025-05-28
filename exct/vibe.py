@@ -33,10 +33,12 @@ class Song:
 		songAttr = songXML.attrib
 
 		#Attribs with only 1 value allowed.
-		self.name = songAttr["name"]
-		self.artist = songAttr["artist"]
-		self.suggestedBy = songAttr["suggestedBy"]
-		self.url = songAttr["link"]
+		self.nameOriginal = songAttr["name"]
+		self.name = self.nameOriginal.lower()
+		self.artistOriginal = songAttr["artist"]
+		self.artist = self.artistOriginal.lower()
+		self.suggestedBy = songAttr["suggestedBy"].lower()
+		self.url = songAttr["link"].lower()
 
 		#Attribs with multiple values allowed
 		self.id = splitAttr(songAttr["id"])
@@ -48,7 +50,7 @@ class Song:
 		try:
 			#Convert duration to integer seconds. If this fails, handle somehow.
 			#Allowed to be [80 | 80.0 | 80s | 80.0s].
-			self.duration = int(songAttr["duration"].replace("s", ""))
+			self.duration = int(songAttr["duration"].lower().replace("s", ""))
 		except ValueError:
 			raise AttributeError("Duration must be an integer number of seconds.")
 
@@ -83,7 +85,7 @@ class Song:
 	def format(self, noURL: bool=False) -> str:
 		#Convert to nice looking discord markdown formatting
 		return f"""
-### *'{self.name}' by '{self.artist}' : {self.duration}s*
+### *'{self.nameOriginal}' by '{self.artistOriginal}' : {self.duration}s*
 -# *Suggested by {formatName(self.suggestedBy)}*
 {'' if noURL else self.url}"""
 
@@ -130,7 +132,7 @@ def findRelevantSongs(messageData: str, username: str) -> list[Song]:
 		if searchAttrib in ("lessthan", "less", "morethan", "more"):
 			try:
 				#Allowed to be [80 | 80.0 | 80s | 80.0s].
-				searchValue = int(searchValue.replace("s", ""))
+				searchValue = int(searchValue.lower().replace("s", ""))
 			except ValueError:
 				raise ValueError("Duration must be an integer number of seconds.")
 
