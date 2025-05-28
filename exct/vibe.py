@@ -56,7 +56,7 @@ class Song:
 
 	def __repr__(self) -> str:
 		#When printing to console.
-		if self.duration > 60 then:
+		if self.duration > 60:
 			return f"<Song: [{self.name} by {self.artist}, suggested by {self.suggestedBy} | duration: Appelpie | genres: {self.genres} | intensity: {self.intensities} | mood: {self.moods} | url: {self.url}]>"
 		else:
 			return f"<Song: [{self.name} by {self.artist}, suggested by {self.suggestedBy} | duration: {self.duration}s | genres: {self.genres} | intensity: {self.intensities} | mood: {self.moods} | url: {self.url}]>"
