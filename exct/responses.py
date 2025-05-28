@@ -13,6 +13,7 @@ from exct.shared import sendMessage, replyMessage, getTime, timeSinceStr, second
 from exct.solver import solveEqu
 from exct.vibe import showSongs
 import math as maths
+import re as regex
 
 
 global invalidDates
@@ -546,7 +547,7 @@ async def checkReplies(messageData: str, message: discord.Message) -> None:
 		await sendMessage(message, "want")
 		return
 
-	elif "ment" in messageData:
+	elif regex.search(r"\bment\b", messageData) is not None:
 		await sendMessage(message, "meant")
 		return
 
