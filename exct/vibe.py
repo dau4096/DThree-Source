@@ -1,5 +1,6 @@
 import xml.etree.ElementTree as ET
-import discord
+import re as regex
+import discord, os.path
 from exct.shared import replyMessage, formatName
 
 
@@ -64,12 +65,12 @@ class Song:
 			raise AttributeError("Unknown attribute: " + attrStr)
 
 
-	def format(self) -> str:
+	def format(self, noURL: bool=False) -> str:
 		#Convert to nice looking discord markdown formatting
 		return f"""
 ### *'{self.name}' by '{self.artist}' : {self.duration}s*
 -# *Suggested by {formatName(self.suggestedBy)}*
-{self.url}"""
+{'' if noURL else self.url}"""
 
 
 def handleDuration(thisSong: Song, searchAttrib: str, searchValue: int) -> bool:
@@ -107,7 +108,8 @@ def findRelevantSongs(messageData: str) -> list[Song]:
 
 	elif (len(inputSplit) >= 2):
 		#Must have some attribute to search for.
-		searchAttrib, searchValue = inputSplit[:2]
+		searchAttrib = inputSplit[0]
+		searchValue = " ".join(inputSplit[1:])
 		if searchAttrib in ("lessthan", "less", "morethan", "more"):
 			try:
 				#Allowed to be [80 | 80.0 | 80s | 80.0s].
@@ -143,7 +145,10 @@ async def showSongs(message: discord.Message, messageData: str) -> None:
 
 	finalMsgString = ""
 	for song in songList:
-		finalMsgString += song.format()
+		noURL = regex.search(r"^[^/].+\.(mp4|mp3|avi|m4a)$", song.url) is not None
+		finalMsgString += song.format(noURL=noURL)
+		if noURL and (os.path.isfile(song.url)):
+			await message.channel.send(file=discord.File(os.path.join("/opt/render/project/src/textFiles/vibe", song.url)))
 
 
 	await replyMessage(message, finalMsgString)

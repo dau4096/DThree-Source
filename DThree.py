@@ -28,10 +28,15 @@ async def backgroundActions(client: discord.Client) -> None:
 	global D3StartTime
 	D3StartTime = time.time()
 	try:
-		pullData() #Get latest datafiles.
+		#Get latest datafiles.
+		pullData() 
+		await updateRepo(None)
+
 		while True:
 			await asyncio.sleep(3600) #60*60s, 1 hour.
 			backupData() #Backup /project/src/disk/data/
+
+
 	except Exception as e:
 		#Send background errors to testing server.
 		await sendMessageInChannel(
