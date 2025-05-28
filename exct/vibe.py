@@ -5,8 +5,21 @@ from exct.shared import replyMessage, formatName
 
 
 #Genre: Metal/Rock -> ["metal", "rock"]
-global multiAttribSplitChar
+global multiAttribSplitChar, nameList
 multiAttribSplitChar = "/"
+
+nameList = {
+	"dau": "__dau__", "d": "__dau__",
+	"cesko": "tornadoteam_the_t","t": "tornadoteam_the_t", "tornado": "tornadoteam_the_t",
+	"howitzer": "themightyhowitzer", "m": "themightyhowitzer", "tmh": "themightyhowitzer",
+	"ace": "hamez_boi",
+	"random": "randomuser78", "r": "randomuser78",
+	"shabble": "shabbles", "shab": "shabbles", "femboy": "shabbles",
+	"boogie": "boogie152", "boog": "boogie152",
+	"melted": "meltedpuddingwx",
+	"gitty": "worldofrice"
+}
+
 
 def splitAttr(attr: str) -> list[str]:
 	#Splits by multiAttribSplitChar
@@ -89,7 +102,7 @@ def handleAttribList(thisSong: Song, searchAttrib: str, searchValue: str) -> boo
 
 
 
-def findRelevantSongs(messageData: str) -> list[Song]:
+def findRelevantSongs(messageData: str, username: str) -> list[Song]:
 	#Load XML file
 	tree = ET.parse("/opt/render/project/src/textFiles/vibe/songData.xml")
 	root = tree.getroot()
@@ -117,6 +130,12 @@ def findRelevantSongs(messageData: str) -> list[Song]:
 			except ValueError:
 				raise ValueError("Duration must be an integer number of seconds.")
 
+		if (searchAttrib in ("addedby", "user")) :
+			if (searchValue in nameList):
+				searchValue = nameList[searchValue]
+			elif (searchValue in ("me", "myself")):
+				searchValue = username
+
 	else:
 		if inputSplit[0] in ("all", "everything"):
 			#Allow specifying "all" songs.
@@ -141,17 +160,21 @@ def findRelevantSongs(messageData: str) -> list[Song]:
 
 async def showSongs(message: discord.Message, messageData: str) -> None:
 	#Example: "/vibe all"
-	songList = findRelevantSongs(messageData)
+	songList = findRelevantSongs(messageData, str(message.author))
 
-	finalMsgString = ""
-	for song in songList:
-		noURL = regex.search(r"^[^/].+\.(mp4|mp3|avi|m4a)$", song.url) is not None
-		finalMsgString += song.format(noURL=noURL)
-		if noURL:
-			try:
-				await message.channel.send(file=discord.File("/opt/render/project/src/textFiles/vibe" + song.url))
-			except FileNotFoundError:
-				finalMsgString += "Could not find relevent file."
+	if len(songList) == 0:
+		finalMsgString = "Could not find any relevant songs."
+	else:
+		finalMsgString = ""
+		for song in songList:
+			noURL = regex.search(r"^[^/].+\.(mp4|mp3|avi|m4a)$", song.url) is not None
+			finalMsgString += song.format(noURL=noURL)
+			if noURL:
+				try:
+					await message.channel.send(file=discord.File("/opt/render/project/src/textFiles/vibe" + song.url))
+				except FileNotFoundError:
+					finalMsgString += "Could not find relevent file."
+
 
 
 	await replyMessage(message, finalMsgString)
