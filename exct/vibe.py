@@ -147,8 +147,11 @@ async def showSongs(message: discord.Message, messageData: str) -> None:
 	for song in songList:
 		noURL = regex.search(r"^[^/].+\.(mp4|mp3|avi|m4a)$", song.url) is not None
 		finalMsgString += song.format(noURL=noURL)
-		if noURL and (os.path.isfile(song.url)):
-			await message.channel.send(file=discord.File(os.path.join("/opt/render/project/src/textFiles/vibe", song.url)))
+		if noURL:
+			try:
+				await message.channel.send(file=discord.File("/opt/render/project/src/textFiles/vibe" + song.url))
+			except FileNotFoundError:
+				finalMsgString += "Could not find relevent file."
 
 
 	await replyMessage(message, finalMsgString)
