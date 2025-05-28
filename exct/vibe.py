@@ -38,7 +38,7 @@ class Song:
 		self.artistOriginal = songAttr["artist"]
 		self.artist = self.artistOriginal.lower()
 		self.suggestedBy = songAttr["suggestedBy"].lower()
-		self.url = songAttr["link"].lower()
+		self.url = songAttr["link"]
 
 		#Attribs with multiple values allowed
 		self.id = splitAttr(songAttr["id"])
