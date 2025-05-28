@@ -1,6 +1,6 @@
 import xml.etree.ElementTree as ET
 import re as regex
-import discord, os.path
+import discord, os.path, random
 from exct.shared import replyMessage, formatName
 
 
@@ -114,9 +114,11 @@ def findRelevantSongs(messageData: str, username: str) -> list[Song]:
 
 
 	allSongs = False
+	randomSong = False
 	searchAttrib, searchValue = "", ""
 	if (len(inputSplit) < 1) or (len(inputSplit) == 1) and (inputSplit[0] == ""):
 		#Must just be "/vibe" alone; show all songs.
+		randomSong = True
 		allSongs = True
 
 	elif (len(inputSplit) >= 2):
@@ -154,7 +156,10 @@ def findRelevantSongs(messageData: str, username: str) -> list[Song]:
 			songList.append(thisSong)
 
 
-	return songList
+	if randomSong:
+		return [random.choice(songList),]
+	else:
+		return songList
 
 
 
