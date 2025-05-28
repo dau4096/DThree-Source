@@ -33,13 +33,13 @@ class Song:
 		songAttr = songXML.attrib
 
 		#Attribs with only 1 value allowed.
-		self.id = songAttr["id"]
 		self.name = songAttr["name"]
 		self.artist = songAttr["artist"]
 		self.suggestedBy = songAttr["suggestedBy"]
 		self.url = songAttr["link"]
 
 		#Attribs with multiple values allowed
+		self.id = splitAttr(songAttr["id"])
 		self.genres = splitAttr(songAttr["genre"])
 		self.intensities = splitAttr(songAttr["intensity"])
 		self.moods = splitAttr(songAttr["mood"])
