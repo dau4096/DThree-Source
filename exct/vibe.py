@@ -33,6 +33,7 @@ class Song:
 		songAttr = songXML.attrib
 
 		#Attribs with only 1 value allowed.
+		self.id = songAttr["id"]
 		self.name = songAttr["name"]
 		self.artist = songAttr["artist"]
 		self.suggestedBy = songAttr["suggestedBy"]
@@ -60,6 +61,7 @@ class Song:
 		#Get attribute list from a string attribute name the user gave.
 		#Some strings can mean the same attribute, depending on user wording.
 		attrDict = {
+			"id": self.id,
 			"name": self.name, "title": self.name,
 			"artist": self.artist, "musician": self.artist, "creator": self.artist, "by": self.artist,
 			"addedby": self.suggestedBy, "user": self.suggestedBy,
