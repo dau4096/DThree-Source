@@ -560,23 +560,23 @@ async def checkReplies(messageData: str, message: discord.Message) -> None:
 	elif "/add" in messageData: #@Un-Pingable
 		await sendMessage(message, "https://github.com/dau4096/DThree-Source \n https://github.com/dau4096/DThree-Files")
 		return
-	elif "prety" in messageData: #@Un-Pingable
+	elif "prety" in messageData:
 		await sendMessage(message, "pretty")
 		return
 
-	elif "wich" in messageData: #@Un-Pingable
+	elif "wich" in messageData:
 		await sendMessage(message, "which")
 		return
 		
-	elif "belive" in messageData: #@Un-Pingable
+	elif "belive" in messageData:
 		await sendMessage(message, "believe")
 		return
 
-	elif "simmilar" in messageData: #@Un-Pingable
+	elif "simmilar" in messageData:
 		await sendMessage(message, "Similar")
 		return
 
-	elif "buisy" in messageData: #@Un-Pingable
+	elif "buisy" in messageData:
 		await sendMessage(message, "busy")
 		return
 
