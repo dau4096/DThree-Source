@@ -105,7 +105,7 @@ def handleDuration(thisSong: Song, searchAttrib: str, searchValue: int) -> bool:
 
 def handleAttribList(thisSong: Song, searchAttrib: str, searchValue: str) -> bool:
 	if searchAttrib in ("lessthan", "less", "morethan", "more"): return False
-	return any(attr == searchValue for attr in thisSong.getAttribFromStr(searchAttrib))
+	return any(attr.lower() == searchValue.lower() for attr in thisSong.getAttribFromStr(searchAttrib))
 
 
 
