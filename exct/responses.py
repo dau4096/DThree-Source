@@ -323,7 +323,7 @@ async def showTotalWords(message: str) -> None:
 		counter = "words" if count != 1 else "word"
 		percent = round(100 * (count/totalWords), 2)
 		if percent < 0.01: continue
-		formatted += f"- **{reformatName(user)}:** {formatNumber(count)} {counter} *({percent}%)*\n"
+		formatted += f"- **{formatName(user)}:** {formatNumber(count)} {counter} *({percent}%)*\n"
 	formatted += "-# *Calculated based on values in wordOccurrences.csv*"
 
 
