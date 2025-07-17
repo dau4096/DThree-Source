@@ -592,7 +592,7 @@ async def replyToCorrection(message: discord.Message, repliedMessage: discord.Me
 	messageData = removeNonASCII(repliedMessage.content.strip().lower())
 	for correction in corrections:
 		if (
-			(regex.search(rf"\b{correction.wrongWord}\b", removeNonASCII(repliedMessage.content.strip().lower())) is not None) and
+			(regex.search(f"\\b{correction.correctWord}\\b", repliedMessage.content.strip()) is not None) and
 			any(word in messageData for word in ("wrong", "no", "incorrect", "shut", "stop"))
 		):
 			await replyMessage(message, correction.link)
