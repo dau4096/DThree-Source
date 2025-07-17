@@ -1,7 +1,7 @@
 import discord, asyncio, random, importlib, os, subprocess, datetime, time
 from games.chess import checkChessGames, testImage
 from games.noughtsAndCrosses import checkNoughtsAndCrossesGames
-from exct.responses import checkReplies
+from exct.responses import checkReplies, replyToCorrection
 from exct.memeBrowse import browseMemes
 from exct.webSearch import lookUp
 from exct.shared import removeNonASCII, getTime, sendMessage, replyMessage, timeSinceStr, sendMessageInChannel
@@ -12,7 +12,7 @@ global D3StartTime, DTHREE_PUBLIC, client
 
 
 #Use for testing the bot on Dau's Repository.
-DTHREE_PUBLIC = True
+DTHREE_PUBLIC = False
 
 intents = discord.Intents.default()
 intents.message_content = True
@@ -164,16 +164,29 @@ async def otherTasks(message: discord.Message, messageData: str) -> None:
 
 
 
+async def handleReplyTask(message: discord.Message, repliedMessage: discord.Message) -> None:
+	await replyToCorrection(message, repliedMessage)
+
+
+
+
 @client.event
 async def on_message(message: discord.Message) -> None:
 	if message.author == client.user:
-		return
+		return #Don't self reply.
 	if (not DTHREE_PUBLIC) and message.guild.name != "Dau's Repository":
 		#Stop replies in non-testing server if [not DTHREE_PUBLIC].
 		return
 
 	try:
-		await otherTasks(message, removeNonASCII(message.content.strip().lower()))
+		messageData = removeNonASCII(message.content.strip().lower())
+		if message.reference and isinstance(message.reference.resolved, discord.Message):
+			repliedMessage = message.reference.resolved
+			if repliedMessage.author == client.user:
+				await handleReplyTask(message, repliedMessage)
+				return
+
+		await otherTasks(message, messageData)
 	
 	except Exception as E:
 		#Handle errors gracefully.

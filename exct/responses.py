@@ -9,7 +9,7 @@ from cycler import cycler
 import pandas as pd
 import numpy as np
 import random
-from exct.shared import sendMessage, replyMessage, getTime, timeSinceStr, secondsSince, formatNumber, formatName
+from exct.shared import removeNonASCII, sendMessage, replyMessage, getTime, timeSinceStr, secondsSince, formatNumber, formatName
 from exct.solver import solveEqu
 from exct.vibe import showSongs
 import math as maths
@@ -379,6 +379,30 @@ async def showLeaderboard(message: str) -> None:
 
 
 
+
+
+
+#For correcting words to other words.
+class Correction:
+	def __init__(self, wrongWord: str, correctWord: str, link: str) -> None:
+		self.wrongWord = wrongWord
+		self.correctWord = correctWord
+		self.link = link
+
+	def __repr__(self) -> str:
+		return f"<Correction [Changes '{self.wrongWord}' to '{self.correctWord}' and has link: {self.link}]"
+
+corrections = {
+	Correction("whant",		"want", 	"LINK"),
+	Correction("prety",		"pretty", 	"LINK"),
+	Correction("wich",		"which", 	"LINK"),
+	Correction("belive",	"believe", 	"LINK"),
+	Correction("simmilar",	"similar", 	"LINK"),
+	Correction("buisy",		"busy", 	"LINK"),
+	Correction("teh",		"the", 		"LINK"),
+}
+
+
 #Main reply functions.
 async def checkReplies(messageData: str, message: discord.Message) -> None:
 	"""
@@ -537,7 +561,7 @@ async def checkReplies(messageData: str, message: discord.Message) -> None:
 
 		"""
 	elif any((phrase in messageData for phrase in ("horny", "sex", "sexy", "erotic"))):
-		await sendMessage(message, "<@1071506608833691729>")
+		await sendMessage(message, "<@1071506608833691729>") #boog
 		return
   		"""
 
@@ -545,42 +569,32 @@ async def checkReplies(messageData: str, message: discord.Message) -> None:
 		await sendMessage(message, "<@280720935487537153>")
 		return
 
-	elif "whant" in messageData:
-		await sendMessage(message, "want")
-		return
-
-	elif regex.search(r"\bment\b", messageData) is not None:
-		await sendMessage(message, "meant")
-		return
-
 	elif "<@&1276999767984967762>" in messageData: #@Un-Pingable
-		await sendMessage(message, "what?")
+		await sendMessage(message, "what?") #d3
 		return
 
-	elif "/add" in messageData: #@Un-Pingable
+	elif "/add" in messageData:
 		await sendMessage(message, "https://github.com/dau4096/DThree-Source \n https://github.com/dau4096/DThree-Files")
 		return
-	elif "prety" in messageData:
-		await sendMessage(message, "pretty")
-		return
 
-	elif "wich" in messageData:
-		await sendMessage(message, "which")
-		return
-		
-	elif "belive" in messageData:
-		await sendMessage(message, "believe")
-		return
 
-	elif "simmilar" in messageData:
-		await sendMessage(message, "Similar")
-		return
 
-	elif "buisy" in messageData:
-		await sendMessage(message, "busy")
-		return
+
+	for correction in corrections:
+		if regex.search(rf"\b{correction.wrongWord}\b", messageData) is not None:
+			await replyMessage(message, f"Did you mean '{correction.correctWord}'?")
 
 	
 
 
+
+async def replyToCorrection(message: discord.Message, repliedMessage: discord.Message) -> None:
+	messageData = removeNonASCII(repliedMessage.content.strip().lower())
+	for correction in corrections:
+		if (
+			(regex.search(rf"\b{correction.wrongWord}\b", removeNonASCII(repliedMessage.content.strip().lower())) is not None) and
+			(word in messageData for word in ("wrong", "no", "incorrect", "shut", "stop"))
+		):
+			await replyMessage(message, correction.link)
+			return
 
