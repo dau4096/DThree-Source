@@ -593,7 +593,7 @@ async def replyToCorrection(message: discord.Message, repliedMessage: discord.Me
 	for correction in corrections:
 		if (
 			(regex.search(rf"\b{correction.wrongWord}\b", removeNonASCII(repliedMessage.content.strip().lower())) is not None) and
-			(word in messageData for word in ("wrong", "no", "incorrect", "shut", "stop"))
+			any(word in messageData for word in ("wrong", "no", "incorrect", "shut", "stop"))
 		):
 			await replyMessage(message, correction.link)
 			return
