@@ -182,9 +182,9 @@ async def on_message(message: discord.Message) -> None:
 		messageData = removeNonASCII(message.content.strip().lower())
 		if message.reference and isinstance(message.reference.resolved, discord.Message):
 			repliedMessage = message.reference.resolved
-			#if repliedMessage.author == client.user:
-			await handleReplyTask(message, repliedMessage)
-			return
+			if repliedMessage.author == client.user:
+				await handleReplyTask(message, repliedMessage)
+				return
 
 		await otherTasks(message, messageData)
 	
