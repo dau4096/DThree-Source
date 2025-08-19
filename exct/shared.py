@@ -109,48 +109,38 @@ async def updateRepo(message: discord.Message|None=None) -> None:
 		print("Files are now up to date.")
 
 
-
 def backupData() -> None:
-	"""
-	Pushes datafiles to external backup repo
-	"""
-	dataDir = "/project/src/disk/data"
-	github_token = os.getenv("GITHUB_TOKEN")
-	repo_url = f"https://x-access-token:{github_token}@github.com/dau4096/DThree-Data-Backups.git"
+    """
+    Pushes datafiles to external backup repo
+    """
+    dataDir = "/project/src/disk/data"
+    github_token = os.getenv("GITHUB_TOKEN")
+    repo_url = f"https://x-access-token:{github_token}@github.com/dau4096/DThree-Data-Backups.git"
 
-	if not os.path.exists(os.path.join(dataDir, ".git")): #Ensure folder is a valid git repo location
-		subprocess.run(["git", "init"], cwd=dataDir)
+    ensure_remote(dataDir, repo_url)
 
-	#Reset origin
-	subprocess.run(["git", "remote", "remove", "origin"], cwd=dataDir, check=False)
-	subprocess.run(["git", "remote", "add", "origin", repo_url], cwd=dataDir, check=True)
-	subprocess.run(["git", "remote", "-v"], cwd=dataDir) #debug
+    subprocess.run(["git", "config", "user.email", "d3@render.com"], cwd=dataDir, check=True)
+    subprocess.run(["git", "config", "user.name", "DThree"], cwd=dataDir, check=True)
 
-	subprocess.run(["git", "config", "user.email", "d3@render.com"], cwd=dataDir)
-	subprocess.run(["git", "config", "user.name", "DThree"], cwd=dataDir)
-
-	subprocess.run(["git", "add", "."], cwd=dataDir)
-	subprocess.run(["git", "commit", "-m", f"{datetime.datetime.now()}"], cwd=dataDir)
-	subprocess.run(["git", "branch", "-M", "main"], cwd=dataDir)
-	subprocess.run(["git", "push", "-u", "origin", "main"], cwd=dataDir)
+    subprocess.run(["git", "add", "."], cwd=dataDir, check=True)
+    subprocess.run(["git", "commit", "-m", f"{datetime.datetime.now()}"], cwd=dataDir, check=False)
+    subprocess.run(["git", "branch", "-M", "main"], cwd=dataDir, check=True)
+    subprocess.run(["git", "push", "-u", "origin", "main"], cwd=dataDir, check=True)
 
 
+def pullBackupData() -> None:
+    """
+    Pulls datafiles from external backup repo
+    """
+    dataDir = "/project/src/disk/data"
+    github_token = os.getenv("GITHUB_TOKEN")
+    repo_url = f"https://x-access-token:{github_token}@github.com/dau4096/DThree-Data-Backups.git"
 
-def pullData() -> None:
-	"""
-	Pulls datafiles from external backup repo.
-	"""
-	dataDir = "/project/src/disk/data"
-	github_token = os.getenv("GITHUB_TOKEN")
-	repo_url = f"https://x-access-token:{github_token}@github.com/dau4096/DThree-Data-Backups.git"
+    ensure_remote(dataDir, repo_url)
 
-	if not os.path.exists(os.path.join(dataDir, ".git")): #Ensure folder is a valid git repo location
-		subprocess.run(["git", "init"], cwd=dataDir)
-		subprocess.run(["git", "remote", "add", "origin", repo_url], cwd=dataDir)
+    subprocess.run(["git", "fetch", "origin", "main"], cwd=dataDir, check=True)
+    subprocess.run(["git", "reset", "--hard", "origin/main"], cwd=dataDir, check=True)
 
-	else:
-		subprocess.run(["git", "fetch", "origin", "main"], cwd=dataDir)
-		subprocess.run(["git", "reset", "--hard", "origin/main"], cwd=dataDir)
 
 
 
