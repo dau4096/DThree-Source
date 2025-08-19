@@ -109,6 +109,19 @@ async def updateRepo(message: discord.Message|None=None) -> None:
 		print("Files are now up to date.")
 
 
+
+def ensureRemote(dataDir: str, repo_url: str) -> None:
+    if not os.path.exists(os.path.join(dataDir, ".git")):
+        subprocess.run(["git", "init"], cwd=dataDir, check=True)
+
+    #Reset origin
+    subprocess.run(["git", "remote", "remove", "origin"], cwd=dataDir, check=False)
+    subprocess.run(["git", "remote", "add", "origin", repo_url], cwd=dataDir, check=True)
+
+    #debug
+    subprocess.run(["git", "remote", "-v"], cwd=dataDir)
+
+
 def backupData() -> None:
     """
     Pushes datafiles to external backup repo
@@ -117,7 +130,7 @@ def backupData() -> None:
     github_token = os.getenv("GITHUB_TOKEN")
     repo_url = f"https://x-access-token:{github_token}@github.com/dau4096/DThree-Data-Backups.git"
 
-    ensure_remote(dataDir, repo_url)
+    ensureRemote(dataDir, repo_url)
 
     subprocess.run(["git", "config", "user.email", "d3@render.com"], cwd=dataDir, check=True)
     subprocess.run(["git", "config", "user.name", "DThree"], cwd=dataDir, check=True)
@@ -136,7 +149,7 @@ def pullBackupData() -> None:
     github_token = os.getenv("GITHUB_TOKEN")
     repo_url = f"https://x-access-token:{github_token}@github.com/dau4096/DThree-Data-Backups.git"
 
-    ensure_remote(dataDir, repo_url)
+    ensureRemote(dataDir, repo_url)
 
     subprocess.run(["git", "fetch", "origin", "main"], cwd=dataDir, check=True)
     subprocess.run(["git", "reset", "--hard", "origin/main"], cwd=dataDir, check=True)
