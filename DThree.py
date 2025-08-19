@@ -5,7 +5,7 @@ from exct.responses import checkReplies, replyToCorrection
 from exct.memeBrowse import browseMemes
 from exct.webSearch import lookUp
 from exct.shared import removeNonASCII, getTime, sendMessage, replyMessage, timeSinceStr, sendMessageInChannel
-from exct.shared import pullData, backupData, updateRepo
+from exct.shared import pullBackupData, backupData, updateRepo
 import games.economy
 
 global D3StartTime, DTHREE_PUBLIC, client
@@ -29,7 +29,7 @@ async def backgroundActions(client: discord.Client) -> None:
 	D3StartTime = time.time()
 	try:
 		#Get latest datafiles.
-		pullData() 
+		pullBackupData() 
 		await updateRepo(None)
 
 		while True:
@@ -97,7 +97,7 @@ async def otherTasks(message: discord.Message, messageData: str) -> None:
 		return
 
 	elif messageData.startswith("/pulldata"): #Pull data files from git repo
-		pullData()
+		pullBackupData()
 		await replyMessage(message, "Successfully pulled data from repo.", ping=True)
 		return
 
