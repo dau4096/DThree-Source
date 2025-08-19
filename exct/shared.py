@@ -118,9 +118,6 @@ def ensureRemote(dataDir: str, repo_url: str) -> None:
     subprocess.run(["git", "remote", "remove", "origin"], cwd=dataDir, check=False)
     subprocess.run(["git", "remote", "add", "origin", repo_url], cwd=dataDir, check=True)
 
-    #debug
-    subprocess.run(["git", "remote", "-v"], cwd=dataDir)
-
 
 def backupData() -> None:
     """
