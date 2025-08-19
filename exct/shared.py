@@ -120,7 +120,11 @@ def backupData() -> None:
 
 	if not os.path.exists(os.path.join(dataDir, ".git")): #Ensure folder is a valid git repo location
 		subprocess.run(["git", "init"], cwd=dataDir)
-		subprocess.run(["git", "remote", "add", "origin", repo_url], cwd=dataDir)
+
+	#Reset origin
+	subprocess.run(["git", "remote", "remove", "origin"], cwd=dataDir, check=False)
+	subprocess.run(["git", "remote", "add", "origin", repo_url], cwd=dataDir, check=True)
+	subprocess.run(["git", "remote", "-v"], cwd=dataDir) #debug
 
 	subprocess.run(["git", "config", "user.email", "d3@render.com"], cwd=dataDir)
 	subprocess.run(["git", "config", "user.name", "DThree"], cwd=dataDir)
