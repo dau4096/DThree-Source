@@ -116,7 +116,7 @@ def backupData() -> None:
 	"""
 	dataDir = "/project/src/disk/data"
 	github_token = os.getenv("GITHUB_TOKEN")
-	repo_url = f"https://{github_token}@github.com/dau4096/DThree-Data-Backups.git"
+	repo_url = f"https://DThree:{github_token}@github.com/dau4096/DThree-Data-Backups.git"
 
 	if not os.path.exists(os.path.join(dataDir, ".git")): #Ensure folder is a valid git repo location
 		subprocess.run(["git", "init"], cwd=dataDir)
