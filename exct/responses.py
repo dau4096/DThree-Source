@@ -239,7 +239,7 @@ async def occurrencesSaveGraph(word: str, message: discord.Message, filename: st
 		else:
 			colour = "#FF00FF"
 
-		ax.plot(dates, counts, label=reformatName(name, mpl=True), color=colour)
+		ax.plot(dates, counts, label=formatName(name, mpl=True), color=colour)
 
 
 	ax.set_title(f'Occurrences of "{word}"', color="white")
