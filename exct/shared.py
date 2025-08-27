@@ -110,13 +110,12 @@ async def updateRepo(message: discord.Message|None=None) -> None:
 
 
 
-def ensureRemote(dataDir: str, repo_url: str) -> None:
+def ensureRemote(dataDir: str, repoURL: str) -> None:
     if not os.path.exists(os.path.join(dataDir, ".git")):
         subprocess.run(["git", "init"], cwd=dataDir, check=True)
-
-    #Reset origin
-    subprocess.run(["git", "remote", "remove", "origin"], cwd=dataDir, check=False)
-    subprocess.run(["git", "remote", "add", "origin", repo_url], cwd=dataDir, check=True)
+        subprocess.run(["git", "remote", "add", "origin", repoURL], cwd=dataDir, check=True)
+    else:
+        subprocess.run(["git", "remote", "set-url", "origin", repoURL], cwd=dataDir, check=True)
 
 
 def backupData() -> None:
