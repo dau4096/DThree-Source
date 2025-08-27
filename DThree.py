@@ -39,12 +39,15 @@ async def backgroundActions(client: discord.Client) -> None:
 
 	except Exception as e:
 		#Send background errors to testing server.
+		return
+		"""
 		await sendMessageInChannel(
 			client,
 			f"# Error occurred in background actions: {e}\n-# @663451560465924097", #Pings __dau__
 			"Dau's Repository",
 			"bot-testing"
 		)
+		"""
 		print(e)
 
 
