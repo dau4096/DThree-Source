@@ -522,6 +522,10 @@ async def checkReplies(messageData: str, message: discord.Message) -> None:
 		await replyMessage(message, "Beep Boop.")
 		return
 
+	if messageData.startswith("clanker") or messageData.startswith("clanka"):
+		await replyMessage(message, "Thats just wrong, this is the 21st century, you cant be saying things like that")
+		return
+
 
 	#Old command carried over from terminal; replies with message contents.
 	if messageData.startswith("/echo"):
@@ -533,7 +537,6 @@ async def checkReplies(messageData: str, message: discord.Message) -> None:
 		return
 
 	if (str(message.author) == "DThree#3744") and ("CLANKER" in messageData):
-		#Old joke response. Replies to Česko with "mid".
 		await replyMessage(message, "CLANKER", ping=True)
 		return
 
