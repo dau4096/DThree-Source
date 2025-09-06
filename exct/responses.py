@@ -532,6 +532,11 @@ async def checkReplies(messageData: str, message: discord.Message) -> None:
 		await sendMessage(message, str(random.randint(1,10)))
 		return
 
+	if (str(message.author) == "DThree#3744") and ("CLANKER" in messageData):
+		#Old joke response. Replies to Česko with "mid".
+		await replyMessage(message, "CLANKER", ping=True)
+		return
+
 
 
 	#Temporarily removed due to annoyance
