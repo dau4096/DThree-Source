@@ -169,7 +169,7 @@ async def handleReplyTask(message: discord.Message, repliedMessage: discord.Mess
 
 
 
-def shouldSendMessage(message: discord.Message) -> bool:
+def shouldNotSendMessage(message: discord.Message) -> bool:
 	return not (os.path.exists("/opt/render/project/src/textFiles/d3.public") or message.guild.name == "Dau's Repository")
 
 
