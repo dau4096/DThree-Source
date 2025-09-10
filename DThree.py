@@ -11,9 +11,6 @@ import games.economy
 global D3StartTime, DTHREE_PUBLIC, client
 
 
-#Use for testing the bot on Dau's Repository.
-DTHREE_PUBLIC = True
-
 intents = discord.Intents.default()
 intents.message_content = True
 intents.members = True
@@ -172,12 +169,15 @@ async def handleReplyTask(message: discord.Message, repliedMessage: discord.Mess
 
 
 
+def shouldSendMessage(message: discord.Message) -> bool:
+	return not (os.path.exists("/opt/render/project/src/textFiles/d3.public") or message.guild.name == "Dau's Repository")
+
 
 @client.event
 async def on_message(message: discord.Message) -> None:
 	if message.author == client.user:
 		return #Don't self reply.
-	if (not DTHREE_PUBLIC) and message.guild.name != "Dau's Repository":
+	if shouldNotSendMessage(message):
 		#Stop replies in non-testing server if [not DTHREE_PUBLIC].
 		return
 
