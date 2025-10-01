@@ -111,7 +111,7 @@ def handleAttribList(thisSong: Song, searchAttrib: str, searchValue: str) -> boo
 
 def findRelevantSongs(messageData: str, username: str) -> list[Song]:
 	#Load XML file
-	tree = ET.parse("/opt/render/project/src/textFiles/vibe/songData.xml")
+	tree = ET.parse(f"{os.getenv('TXT_DIR')}/vibe/songData.xml")
 	root = tree.getroot()
 
 
@@ -183,7 +183,7 @@ async def showSongs(message: discord.Message, messageData: str) -> None:
 			finalMsgString += song.format(noURL=noURL)
 			if noURL:
 				try:
-					await message.channel.send(file=discord.File("/opt/render/project/src/textFiles/vibe" + song.url))
+					await message.channel.send(file=discord.File(f"{os.getenv('TXT_DIR')}/vibe" + song.url))
 				except FileNotFoundError:
 					finalMsgString += "Could not find relevent file."
 

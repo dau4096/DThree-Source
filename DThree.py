@@ -1,4 +1,6 @@
 import discord, asyncio, random, importlib, os, subprocess, datetime, time
+from dotenv import load_dotenv
+load_dotenv()
 from games.chess import checkChessGames, testImage
 from games.noughtsAndCrosses import checkNoughtsAndCrossesGames
 from exct.responses import checkReplies, replyToCorrection
@@ -62,7 +64,7 @@ async def otherTasks(message: discord.Message, messageData: str) -> None:
 	global D3StartTime, DTHREE_PUBLIC
 
 	"""Handles all other asynchronous tasks."""
-	spainFilePath = "/project/src/disk/data/wordsSinceSpanishInquisition.txt"
+	spainFilePath = f"{os.getenv('DISK_DIR')}/data/wordsSinceSpanishInquisition.txt"
 	if os.path.exists(spainFilePath):
 		with open(spainFilePath, "r") as spainFile:
 			lines = spainFile.readlines()
@@ -71,7 +73,7 @@ async def otherTasks(message: discord.Message, messageData: str) -> None:
 				wordsSinceSpanishInquisition += 1
 				if wordsSinceSpanishInquisition > 1023:
 					if (random.randint(0, 1023) == 127) or (wordsSinceSpanishInquisition > 2047):
-						await message.reply(file=discord.File("/project/src/disk/data/Inquisition.gif"), mention_author=True)
+						await message.reply(file=discord.File(f"{os.getenv('DISK_DIR')}/data/Inquisition.gif"), mention_author=True)
 						wordsSinceSpanishInquisition = 0
 			else:
 				#If file gets OBLITERATED again, repopulate it.
@@ -170,7 +172,7 @@ async def handleReplyTask(message: discord.Message, repliedMessage: discord.Mess
 
 
 def shouldNotSendMessage(message: discord.Message) -> bool:
-	return not (os.path.exists("/opt/render/project/src/textFiles/d3.public") or message.guild.name == "Dau's Repository")
+	return not (os.path.exists(f"{os.getenv('TXT_DIR')}/d3.public") or message.guild.name == "Dau's Repository")
 
 
 @client.event

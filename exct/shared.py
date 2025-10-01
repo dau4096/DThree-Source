@@ -3,6 +3,8 @@ from dateutil.relativedelta import relativedelta
 
 
 
+
+
 def getTime(dateOnly: bool=False) -> str:
 	"""
 	Gets current date/time, returns as a nicely formatted string. [HH:MM:SS, YYYY-MM-DD] formatting.
@@ -66,7 +68,7 @@ def formatNumber(num: int|float, seperator: str=",", delimiter: str=".", roundin
 
 
 async def sendMessage(message: discord.Message, messageText: str) -> None:
-	with open("/project/src/disk/data/log.txt", "a", encoding="utf-8") as logFile:
+	with open(f"{os.getenv('DISK_DIR')}/data/log.txt", "a", encoding="utf-8") as logFile:
 		if "*An error occurred;*" not in messageText:
 			logFile.write("\n" + f"{getTime()} // {message.guild} // SEND {message.author} // {messageText}".replace('\n', ';'))
 
@@ -83,7 +85,7 @@ async def replyMessage(message: discord.Message, messageText: str, ping: bool=Tr
 		#Cannot send zero-length messages.
 		return
 
-	with open("/project/src/disk/data/log.txt", "a", encoding="utf-8") as logFile:
+	with open(f"{os.getenv('DISK_DIR')}/data/log.txt", "a", encoding="utf-8") as logFile:
 		if "*An error occurred;*" not in messageText:
 			logFile.write("\n" + f"{getTime()} // {message.guild} // REPLY {message.author} // {messageText.strip()}")
 
@@ -98,7 +100,7 @@ async def updateRepo(message: discord.Message|None=None) -> None:
 	If called via "/updaterepo", it sends a reply to that message for confirmation.
 	Otherwise prints confirmation to console.
 	"""
-	os.chdir("/opt/render/project/src/textFiles")
+	os.chdir(f"{os.getenv('TXT_DIR')}")
 	subprocess.run(["git", "fetch", "--all"])  #Fetch all branches
 	subprocess.run(["git", "reset", "--hard", "origin/main"])  #Reset local branch
 	subprocess.run(["git", "pull", "origin", "main"])  #Pull changes
@@ -122,11 +124,10 @@ def backupData() -> None:
     """
     Pushes datafiles to external backup repo
     """
-    dataDir = "/project/src/disk/data"
-    github_token = os.getenv("GITHUB_TOKEN")
-    repo_url = f"https://x-access-token:{github_token}@github.com/dau4096/DThree-Data-Backups.git"
+    dataDir = f"{os.getenv('DISK_DIR')}/data"
+    repoURL = f"https://x-access-token:{os.getenv("GITHUB_TOKEN")}@github.com/dau4096/DThree-Data-Backups.git"
 
-    ensureRemote(dataDir, repo_url)
+    ensureRemote(dataDir, repoURL)
 
     subprocess.run(["git", "config", "user.email", "d3@render.com"], cwd=dataDir, check=True)
     subprocess.run(["git", "config", "user.name", "DThree"], cwd=dataDir, check=True)
@@ -141,11 +142,10 @@ def pullBackupData() -> None:
     """
     Pulls datafiles from external backup repo
     """
-    dataDir = "/project/src/disk/data"
-    github_token = os.getenv("GITHUB_TOKEN")
-    repo_url = f"https://x-access-token:{github_token}@github.com/dau4096/DThree-Data-Backups.git"
+    dataDir = f"{os.getenv('DISK_DIR')}/data"
+    repoURL = f"https://x-access-token:{os.getenv("GITHUB_TOKEN")}@github.com/dau4096/DThree-Data-Backups.git"
 
-    ensureRemote(dataDir, repo_url)
+    ensureRemote(dataDir, repoURL)
 
     subprocess.run(["git", "fetch", "origin", "main"], cwd=dataDir, check=True)
     subprocess.run(["git", "reset", "--hard", "origin/main"], cwd=dataDir, check=True)

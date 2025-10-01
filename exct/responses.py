@@ -42,7 +42,7 @@ async def choiceCommand(messageData: str, message: discord.Message, fileName: st
 		previousChoices[fileName] = [] #Attempts to send a unique line each time.
 
 	if messageData.startswith(f"/{fileName}"):
-		with open(f"/opt/render/project/src/textFiles/phrases/{fileName}.txt", "r", encoding="utf-8") as file:
+		with open(f"{os.getenv('TXT_DIR')}/phrases/{fileName}.txt", "r", encoding="utf-8") as file:
 			fileData = file.readlines()
 			fileData = [line.strip() for line in fileData]
 			if imgFile is not None:
@@ -61,7 +61,7 @@ async def choiceCommand(messageData: str, message: discord.Message, fileName: st
 			if chosenLine == ":img:":
 				#Reply with imagefile.
 				await message.reply(file=discord.File(f"imgs/{imgFile}.png"), mention_author=True)
-				with open("/project/src/disk/data/log.txt", "a", encoding="utf-8") as logFile:
+				with open(f"{os.getenv('DISK_DIR')}/data/log.txt", "a", encoding="utf-8") as logFile:
 					#Manually log occurrence due to lack of use of shared.replyMessage()
 					logFile.write("\n" + f"{shared.getTime()} // {message.guild} // REPLY-IMAGE {message.author} // {imgFile}.png".replace('\n', ';'))
 			else:
@@ -184,7 +184,7 @@ def occurrencesPreProcessing(filename: str, userword: str) -> tuple[dict[str, di
 
 
 
-async def occurrencesSaveGraph(word: str, message: discord.Message, filename: str="/project/src/disk/data/wordOccurrences.csv") -> None:
+async def occurrencesSaveGraph(word: str, message: discord.Message, filename: str=f"{os.getenv('DISK_DIR')}/data/wordOccurrences.csv") -> None:
 	"""
 	Creates the graph to be shown to the user, then sends it.
 	Uses occurrencesPreProcessing() to organise data by name, then by date to get number of times.
@@ -266,7 +266,7 @@ async def occurrencesSaveGraph(word: str, message: discord.Message, filename: st
 
 	# Save
 	fig.savefig(
-		"/project/src/disk/data/graph.png",
+		f"{os.getenv('DISK_DIR')}/data/graph.png",
 		facecolor=fig.get_facecolor(),
 		transparent=False
 	)
@@ -274,7 +274,7 @@ async def occurrencesSaveGraph(word: str, message: discord.Message, filename: st
 
 
 	await sendMessage(message, f'Collating data for "{word}"')
-	await message.channel.send(file=discord.File("/project/src/disk/data/graph.png"))
+	await message.channel.send(file=discord.File(f"{os.getenv('DISK_DIR')}/data/graph.png"))
 	#If multiple people request a graph simultaneously; it gets overwritten. Consider fixing.
 
 
@@ -293,7 +293,7 @@ async def showTotalWords(message: str) -> None:
 	totalWords = 0
 	
 	#Read and aggregate occurrences from the CSV file
-	with open('/project/src/disk/data/wordOccurrences.csv', 'r') as csvfile:
+	with open(f"{os.getenv('DISK_DIR')}/data/wordOccurrences.csv", "r") as csvfile:
 		reader = csv.DictReader(csvfile)
 		for row in reader:
 			name = row['Name']
@@ -343,7 +343,7 @@ async def showLeaderboard(message: str) -> None:
 	sortedList = []
 	
 	#Also read and aggregate occurrences from the CSV file
-	with open('/project/src/disk/data/wordOccurrences.csv', 'r') as csvfile:
+	with open(f"{os.getenv('DISK_DIR')}/data/wordOccurrences.csv", "r") as csvfile:
 		reader = csv.DictReader(csvfile)
 		for row in reader:
 			name = row['Name']
@@ -494,7 +494,7 @@ async def checkReplies(messageData: str, message: discord.Message) -> None:
 
 	#Reply to command messages such as "/seapower"
 	commands = None
-	with open("/opt/render/project/src/textFiles/cmds.txt", "r") as cmdFile:
+	with open(f"{os.getenv('TXT_DIR')}/cmds.txt", "r") as cmdFile:
 		commands = [cmd.strip().lower() for cmd in cmdFile.readlines()]
 	for cmd in commands:
 		validResult = await choiceCommand(messageData, message, cmd.strip().lower())
@@ -522,7 +522,7 @@ async def checkReplies(messageData: str, message: discord.Message) -> None:
 		await replyMessage(message, "Beep Boop.")
 		return
 
-	if any(t in messageData for t in ("clanker", "clanka", "cogsucker")):
+	if any(t in messageData for t in ("clanker", "clanka", "cogsucker", "tinskin", "wireback")):
 		await replyMessage(message, "Thats just wrong, this is the 21st century, you cant be saying things like that")
 		return
 
@@ -570,11 +570,9 @@ async def checkReplies(messageData: str, message: discord.Message) -> None:
 		await sendMessage(message, "That's what she said")
 		return
 
-		"""
 	elif any((phrase in messageData for phrase in ("horny", "sex", "sexy", "erotic"))):
 		await sendMessage(message, "<@1071506608833691729>") #boog
 		return
-  		"""
 
 	elif any((phrase in messageData for phrase in ("professional", "educated", "train tech"))):
 		await sendMessage(message, "<@280720935487537153>")

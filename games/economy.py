@@ -353,7 +353,7 @@ def grantMoney(who, amount, ceo=True, company=False):
 
 
 
-readCSV("/project/src/disk/data/econ.csv")
+readCSV(f"{os.getenv('DISK_DIR')}/data/econ.csv")
 
 
 async def econIterate(message, messageData, forceRandomEvent=False, output=True, forceUnBusy=False):
@@ -363,7 +363,7 @@ async def econIterate(message, messageData, forceRandomEvent=False, output=True,
 
 	user = str(message.author)
 	if messageData.startswith("/econ save"):
-		writeCSV("/project/src/disk/data/econ.csv")
+		writeCSV(f"{os.getenv('DISK_DIR')}/data/econ.csv")
 		replyMessage(message, "Successfully saved to econ.csv")
 		return
 
@@ -992,10 +992,10 @@ Spaces are allowed, linebreaks are not.
 
 ### Setup ###
 """
-writeCSV("/project/src/disk/data/econ.csv", {}) #Clear CSV for testing.
+writeCSV(f"{os.getenv('DISK_DIR')}/data/econ.csv", {}) #Clear CSV for testing.
 
 for _ in range(3):
 	createFakeCompany()
 	time.sleep(0.05)
-writeCSV("/project/src/disk/data/econ.csv", companies)
+writeCSV(f"{os.getenv('DISK_DIR')}/data/econ.csv", companies)
 """
