@@ -1,6 +1,7 @@
 import discord, asyncio, random, importlib, os, subprocess, datetime, time
 from dotenv import load_dotenv
 load_dotenv()
+import signal, sys
 from games.chess import checkChessGames, testImage
 from games.noughtsAndCrosses import checkNoughtsAndCrossesGames
 from exct.responses import checkReplies, replyToCorrection
@@ -20,6 +21,20 @@ intents.guilds = True
 intents.presences = True
 client = discord.Client(intents=intents)
 
+shutdownEvent = asyncio.Event();
+
+
+
+
+def handleShutdown(signum, frame) -> None:
+	#Shutdown via management program. Non-negotiable, but allows time for graceful closure.
+	games.economy.writeCSV(f"{os.getenv('DISK_DIR')}/data/econ.csv");
+	backupData(False); #Don't show anything
+
+	sys.exit(0);
+
+signal.signal(signal.SIGUSR1, handleShutdown);
+
 
 
 #Background Tasks.
@@ -31,7 +46,7 @@ async def backgroundActions(client: discord.Client) -> None:
 		pullBackupData() 
 		await updateRepo(None)
 
-		while True:
+		while not shutdownEvent.is_set():
 			await asyncio.sleep(3600) #60*60s, 1 hour.
 			backupData() #Backup /project/src/disk/data/
 
@@ -50,7 +65,15 @@ async def backgroundActions(client: discord.Client) -> None:
 		print(e)
 
 
+async def shutdown(loop, tasks):
+	shutdownEvent.set();
 
+	for task in tasks:
+		task.cancel();
+
+	await asyncio.gather(*tasks, return_exceptions=True);
+
+	loop.stop();
 
 
 

@@ -85,7 +85,7 @@ async def choiceCommand(messageData: str, message: discord.Message, fileName: st
 
 #Stats [/count]
 
-def occurrencesUpdOccurrences(name: str, words: list[str], filename: str="/project/src/disk/data/wordOccurrences.csv") -> None:
+def occurrencesUpdOccurrences(name: str, words: list[str], filename: str=f"{os.getenv('DISK_DIR')}/data/wordOccurrences.csv") -> None:
 	"""
 	Updates the counts in wordOccurrences.csv (or another provided file) for each word in a message.
 	Utilises Pandas to speed up data processing.

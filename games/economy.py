@@ -1,4 +1,5 @@
 import discord
+import os
 import math as maths
 import random, time
 import csv, json
