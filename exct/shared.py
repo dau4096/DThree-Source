@@ -125,7 +125,7 @@ def backupData() -> None:
     Pushes datafiles to external backup repo
     """
     dataDir = f"{os.getenv('DISK_DIR')}/data"
-    repoURL = f"https://x-access-token:{os.getenv("GITHUB_TOKEN")}@github.com/dau4096/DThree-Data-Backups.git"
+    repoURL = f"https://x-access-token:{os.getenv('GITHUB_TOKEN')}@github.com/dau4096/DThree-Data-Backups.git"
 
     ensureRemote(dataDir, repoURL)
 

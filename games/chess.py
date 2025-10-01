@@ -287,7 +287,7 @@ async def testImage(message):
 			drawImg(surface, "test.png", (0, 0), (128, 128))
 			drawImg(surface, "sheet-1.png", (128, 0), (128, 128), sheetPos="15")
 			PG.display.flip()
-			PG.image.save(surface, f"{os.getenv("SRC_DIR")}imgs/board.png")
+			PG.image.save(surface, f"{os.getenv('SRC_DIR')}imgs/board.png")
 			await message.channel.send(file=discord.File("imgs/board.png"))
 
 
@@ -307,7 +307,7 @@ def drawText(SCREEN, TEXT, POSITION, FONT_SIZE, COLOUR=(255, 255, 255)):
 	raise ValueError("No font in filepath.") #Unsure why this is here.
 	#Draws text on a given surface, with colour, size and position.
 	#Taken from older project.
-	FONT = PG.font.Font(f"{os.getenv("SRC_DIR")}data/PressStart2P-Regular.ttf", FONT_SIZE)
+	FONT = PG.font.Font(f"{os.getenv('SRC_DIR')}data/PressStart2P-Regular.ttf", FONT_SIZE)
 	text_surface = FONT.render(str(TEXT), True, COLOUR)
 	SCREEN.blit(text_surface, POSITION)
 
@@ -315,7 +315,7 @@ def drawText(SCREEN, TEXT, POSITION, FONT_SIZE, COLOUR=(255, 255, 255)):
 def drawImg(surface, filename, position, scale, sheetPos=None):
 	#Draws an image loaded from the file structure (in \src\imgs\) to a position and with scale.
 	#Taken from older project.
-	img = PG.image.load(ff"{os.getenv("SRC_DIR")}imgs\\{filename}")
+	img = PG.image.load(f"{os.getenv('SRC_DIR')}imgs\\{filename}")
 	w,h = img.get_width(), img.get_height()
 
 	if sheetPos is not None:
