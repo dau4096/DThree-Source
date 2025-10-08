@@ -559,7 +559,7 @@ async def checkReplies(messageData: str, message: discord.Message) -> None:
 		return
 		
 	elif ("budget" in messageData):
-		await sendMessage(message, "fr")
+		await sendMessage(message, "fr fr ong no cap")
 		return
 		
 	elif any((phrase in messageData for phrase in ("denmark", "dane", "danmark", "dansk"))):
