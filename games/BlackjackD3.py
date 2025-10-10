@@ -36,9 +36,9 @@ async def handleChallenge(messageData:str, message: discord.Message) -> JBGame|N
 			await replyMessage(message, f"{message.author.display_name}, you cannot start a new game while yours is active. Use `/play r` to reset.", ping=True);
 			return activeGames[message.author.name];
 		else:
-			activeGames.append(JBGame(message.author));
+			activeGames[message.author.name] = JBGame(message.author);
 			await replyMessage(message, f"{message.author.display_name}, you have challenged DThree to a game of BlackJack!", ping=True);
-			return activeGames[-1];
+			return activeGames[message.author.name];
 
 	else:
 		if ((message.author) in activeGames.keys()):
@@ -57,7 +57,7 @@ async def checkJackBlackGames(messageData: str, message: discord.Message) -> Non
 	If so, then tells players about winner and ends the ongoing game.
 	"""
 
-	game:JBGame|None = handleChallenge(messageData, message);
+	game:JBGame|None = await handleChallenge(messageData, message);
 	if (not JBGame):
 		return;
 
