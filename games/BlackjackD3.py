@@ -1,6 +1,6 @@
 import random;
 import discord;
-#from exct.shared import sendMessage, replyMessage;
+from exct.shared import sendMessage, replyMessage;
 
 
 class JBGame:
@@ -44,7 +44,6 @@ async def handleChallenge(messageData:str, message: discord.Message) -> JBGame|N
 		if ((message.author) in activeGames.keys()):
 			return activeGames[message.author.name];
 		else:
-			await replyMessage(message, f"{message.author.display_name}, you need to start a game first, with `/challenge bj`.", ping=True);
 			return None;
 
 
