@@ -10,6 +10,7 @@ from exct.webSearch import lookUp
 from exct.shared import removeNonASCII, getTime, sendMessage, replyMessage, timeSinceStr, sendMessageInChannel
 from exct.shared import pullBackupData, backupData, updateRepo
 import games.economy
+import games.BlackjackD3
 
 global D3StartTime, DTHREE_PUBLIC, client
 
@@ -182,6 +183,7 @@ async def otherTasks(message: discord.Message, messageData: str) -> None:
 	await checkReplies(messageData, message) #"/" Commands and such.
 	await games.economy.econIterate(message, messageData) #/econ and related functions.
 	await checkNoughtsAndCrossesGames(messageData, message) #Checks active ttt games.
+	await games.BlackjackD3.checkJackBlackGames(messageData, message); #Checks active jb games.
 	#await checkChessGames(userDisplayName, messageData, message) #Checks active chess games. Disabled as chess is still unfinished after 9 months (18/05/2025).
 	#await testImage(message) #Debug chess function, probably unnecessary.
 	await browseMemes(messageData, message) #Functions for "/browse".
