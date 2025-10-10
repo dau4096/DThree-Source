@@ -57,7 +57,7 @@ async def checkJackBlackGames(messageData: str, message: discord.Message) -> Non
 	"""
 
 	game:JBGame|None = await handleChallenge(messageData, message);
-	if (not JBGame):
+	if (JBGame is None):
 		return;
 
 	if (not messageData.startswith("/play")): return;
