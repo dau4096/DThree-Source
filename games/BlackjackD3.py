@@ -1,6 +1,6 @@
 import random;
 import discord;
-#from exct.shared import sendMessage, replyMessage;
+from exct.shared import sendMessage, replyMessage;
 
 
 class JBGame:
