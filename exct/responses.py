@@ -68,7 +68,7 @@ async def choiceCommand(messageData: str, message: discord.Message, fileName: st
 				await replyMessage(message, chosenLine.replace("Â¬", "\n").replace("¬", "\n"), ping=True)
 				#I removed this part;
 				#+ "\n ``` \n Message may be negatively effected by current D3 testing performed by howitzer. \n For more information on how this can effect you and your discord experience, please contact your local D3 admin office. \n ``` "
-				# -Dau
+				#-Dau
 				"""
 				"¬" is used to mark a newline in the text files.
 				"Â¬" occasionally occurs when files are read via the wrong format; this too is accounted for as a newline.
