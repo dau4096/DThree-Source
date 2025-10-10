@@ -522,10 +522,6 @@ async def checkReplies(messageData: str, message: discord.Message) -> None:
 		await replyMessage(message, "Beep Boop.")
 		return
 
-	if any(t in messageData for t in ("clanker", "clanka", "cogsucker", "tinskin", "wireback")):
-		await replyMessage(message, "Thats just wrong, this is the 21st century, you cant be saying things like that")
-		return
-
 
 	#Old command carried over from terminal; replies with message contents.
 	if messageData.startswith("/echo"):
