@@ -198,7 +198,7 @@ async def checkNoughtsAndCrossesGames(messageData: str, message: discord.Message
 	#Handle play command [Player making a move in an ongoing game]
 	if messageData.startswith("/play"):
 		if message.channel.id not in activeBoards:
-			await sendMessage(message, "There are no active games in this channel. Start a new game with `/challenge @user`.")
+			#await sendMessage(message, "There are no active games in this channel. Start a new game with `/challenge @user`.")
 			return
 
 		board = activeBoards[message.channel.id]
