@@ -85,6 +85,23 @@ async def choiceCommand(messageData: str, message: discord.Message, fileName: st
 
 #Stats [/count]
 
+nameColours: dict[str, str] = {
+	"__dau__": "#b22225",
+	"tornadoteam_the_t": "#860897",
+	"themightyhowitzer": "#117b66",
+	"hamez_boi": "#c27c0e",
+	"randomuser78": "#72b0db",
+	"shabbles": "#63d4b2",
+	"boogie152": "#f1f0a1",
+	"meltedpuddingwx": "#526b77",
+	"ultrawolk": "#3498db",
+	"worldofrice": "#0239eb",
+	"brtrainfan46": "#ffffff",
+	"dalt7744": "#f1f0a1",
+	"howitzertwo587": "#f1f0a1",
+	"duckson1124": "#ffffff",
+};
+
 def occurrencesUpdOccurrences(name: str, words: list[str], filename: str=f"{os.getenv('DISK_DIR')}/data/wordOccurrences.csv") -> None:
 	"""
 	Updates the counts in wordOccurrences.csv (or another provided file) for each word in a message.
@@ -195,24 +212,6 @@ async def occurrencesSaveGraph(word: str, message: discord.Message, filename: st
 	plt.gca().cla()
 
 
-	nameColours = {
-		"__dau__": "#b22225",
-		"tornadoteam_the_t": "#860897",
-		"themightyhowitzer": "#117b66",
-		"hamez_boi": "#c27c0e",
-		"randomuser78": "#72b0db",
-		"shabbles": "#63d4b2",
-		"boogie152": "#f1f0a1",
-		"meltedpuddingwx": "#526b77",
-		"ultrawolk": "#3498db",
-		"worldofrice": "#0239eb",
-		"brtrainfan46": "#ffffff",
-		"dalt7744": "#f1f0a1",
-		"howitzertwo587": "#f1f0a1",
-		"duckson1124": "#ffffff",
-	}
-
-
 	#Read and preprocess the data
 	data, earliestDate, latestDate = occurrencesPreProcessing(
 		filename,
@@ -280,6 +279,73 @@ async def occurrencesSaveGraph(word: str, message: discord.Message, filename: st
 
 
 #Other
+
+async def occurrencesSaveDailyGraph(message: discord.Message, filename: str=f"{os.getenv('DISK_DIR')}/data/wordOccurrences.csv") -> None:
+	"""
+	Creates a graph showing total number of words spoken per day per person.
+	"""
+	today:datetime.datetime = datetime.datetime.strptime(datetime.datetime.now().strftime("%d-%m-%Y"), "%d-%m-%Y");
+	sept1:datetime.datetime = datetime.datetime.strptime("01-09-2024", "%d-%m-%Y"); #Data first recorded
+	plt.clf();
+	plt.gca().cla();
+
+	if not os.path.exists(filename):
+		await sendMessage(message, "No data file found.");
+		return;
+
+	df:pd.DataFrame = pd.read_csv(filename);
+
+	df["Name"] = df["Name"].astype(str).str.strip().str.lower();
+	df["Date"] = df["Date"].astype(str).str.strip();
+
+	#Filter out bad dates and convert to datetime
+	df = df[df["Date"].str.match(r"^\d{4}-\d{2}-\d{2}$", na=False)];
+	df["Date"] = pd.to_datetime(df["Date"], format="%Y-%m-%d");
+
+	df_grouped:any = df.groupby(["Name", "Date"], as_index=False)["Occurrences"].sum();
+	allDates:pd.DatetimeIndex = pd.date_range(start=sept1, end=today);
+
+
+	#Prepare data
+	userData:dict[str, any] = {};
+	for name, group in df_grouped.groupby("Name"):
+		daily_occurrences = group.set_index("Date")["Occurrences"];
+		userSeries = daily_occurrences.reindex(allDates, fill_value=np.nan);
+		userSeries.interpolate(method="linear", inplace=True)
+		userSeries.fillna(0, inplace=True)
+		userData[name] = userSeries
+
+	# Plot setup
+	fig, ax = plt.subplots(figsize=(10, 6), dpi=150, facecolor="#1a1a1e");
+	ax.set_facecolor("#1a1a1e");
+
+	for name, series in userData.items():
+		dates:list[any] = series.index;
+		counts:list[int] = series.values;
+		colour:str = nameColours.get(name, "#FF00FF");
+		ax.plot(dates, counts, label=formatName(name, mpl=True), color=colour);
+
+	ax.set_title("Total Words Spoken Per Day", color="white");
+	ax.set_xlabel("Date", color="white");
+	ax.set_ylabel("Total Words", color="white");
+	ax.tick_params(colors="white");
+	ax.legend(loc="upper right", facecolor="#1a1a1e", edgecolor="white", labelcolor="white");
+	ax.xaxis.set_major_formatter(mdates.DateFormatter("%d/%m/%y"));
+	ax.xaxis.set_major_locator(mdates.MonthLocator(interval=1));
+	ax.yaxis.set_major_locator(mticker.MaxNLocator(integer=True));
+	ax.grid(True, linestyle="--", linewidth=0.5, color="gray");
+	fig.autofmt_xdate();
+
+	savePath:str = f"{os.getenv('DISK_DIR')}/data/graph.png";
+	fig.savefig(savePath, facecolor=fig.get_facecolor(), transparent=False);
+	plt.close(fig);
+
+	await sendMessage(message, "Collating daily word data...");
+	await message.channel.send(file=discord.File(savePath));
+
+
+
+
 
 async def showTotalWords(message: str) -> None:
 	"""
@@ -418,6 +484,10 @@ async def checkReplies(messageData: str, message: discord.Message) -> None:
 		word = messageData.split(" ")[1]
 		await occurrencesSaveGraph(word, message)
 		return
+
+	elif messageData.startswith("/countdaily"):
+		await occurrencesSaveDailyGraph(word, message);
+		return;
 
 	elif messageData.startswith("/counttotal"):
 		await showTotalWords(message)
