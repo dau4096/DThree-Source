@@ -322,7 +322,8 @@ async def occurrencesSaveDailyGraph(message: discord.Message, filename: str=f"{o
 	for name, series in userData.items():
 		dates:list[any] = series.index;
 		counts:list[int] = series.values;
-		colour:str = nameColours.get(name, "#FF00FF");
+		colour:str = nameColours.get(name, "#NAN");
+		if (colour == "#NAN"): continue;
 		ax.plot(dates, counts, label=formatName(name, mpl=True), color=colour);
 
 	ax.set_title("Total Words Spoken Per Day", color="white");
