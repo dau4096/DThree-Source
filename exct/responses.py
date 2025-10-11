@@ -476,7 +476,7 @@ corrections = {
 async def checkReplies(messageData: str, message: discord.Message) -> None:
 	"""
 	Checks for any relevant commands to respond to.
-	Handles /count related and various older responses (such as author=tornadoteam_the_t -> Reply "mid")
+	Handles /count related and various older responses (such as author=tornadoteam_the_t → Reply "mid")
 
 	"""
 
@@ -486,7 +486,7 @@ async def checkReplies(messageData: str, message: discord.Message) -> None:
 		return
 
 	elif messageData.startswith("/countdaily"):
-		await occurrencesSaveDailyGraph(word, message);
+		await occurrencesSaveDailyGraph(message);
 		return;
 
 	elif messageData.startswith("/counttotal"):
