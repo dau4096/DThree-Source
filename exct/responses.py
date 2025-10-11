@@ -499,7 +499,7 @@ async def checkReplies(messageData: str, message: discord.Message) -> None:
 
 	else:
 		#If none of the above, then record message's words in the csv.
-		occurrencesUpdOccurrences(str(message.author), messageData.split(" "))
+		occurrencesUpdOccurrences(str(message.author), messageData.replace("\n", "`").split(" "))
 
 
 
