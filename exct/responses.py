@@ -322,6 +322,9 @@ async def occurrencesSaveDailyGraph(message: discord.Message, filename: str=f"{o
 	for name, series in userData.items():
 		dates:list[any] = series.index;
 		counts:list[int] = series.values;
+		for i,v in enumerate(counts):
+			if v > 8e3:
+				print(dates[i],i,v);
 		colour:str = nameColours.get(name, "#NAN");
 		if (colour == "#NAN"): continue;
 		ax.plot(dates, counts, label=formatName(name, mpl=True), color=colour);
