@@ -68,7 +68,7 @@ def formatNumber(num: int|float, seperator: str=",", delimiter: str=".", roundin
 
 
 async def sendMessage(message: discord.Message, messageText: str) -> None:
-	with open(f"{os.getenv('DISK_DIR')}/data/log.txt", "a", encoding="utf-8") as logFile:
+	with open(f"{os.getenv('DISK_DIR')}/data/d3.log", "a", encoding="utf-8") as logFile:
 		if "*An error occurred;*" not in messageText:
 			logFile.write("\n" + f"{getTime()} // {message.guild} // SEND {message.author} // {messageText}".replace('\n', ';'))
 
@@ -85,7 +85,7 @@ async def replyMessage(message: discord.Message, messageText: str, ping: bool=Tr
 		#Cannot send zero-length messages.
 		return
 
-	with open(f"{os.getenv('DISK_DIR')}/data/log.txt", "a", encoding="utf-8") as logFile:
+	with open(f"{os.getenv('DISK_DIR')}/data/d3.log", "a", encoding="utf-8") as logFile:
 		if "*An error occurred;*" not in messageText:
 			logFile.write("\n" + f"{getTime()} // {message.guild} // REPLY {message.author} // {messageText.strip()}")
 
