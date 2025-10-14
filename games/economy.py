@@ -279,6 +279,7 @@ def readCSV(file_path):
 
 def writeCSV(file_path):
 	global companies
+	if len(companies) == 0: return;
 	with open(file_path, mode="w", newline="") as file:
 		fieldnames = ["owner", "name", "balance", "assets", "debts", "loans", "age", "currency", "real"]
 		writer = csv.DictWriter(file, fieldnames=fieldnames)
