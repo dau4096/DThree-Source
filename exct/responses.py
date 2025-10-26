@@ -500,7 +500,7 @@ async def checkReplies(messageData: str, message: discord.Message) -> None:
 
 	else:
 		#If none of the above, then record message's words in the csv.
-		cleanedMessage:str = regex.sub(r'[^a-zA-Z0-9]', '', messageData);
+		cleanedMessage:str = regex.sub(r'[^a-zA-Z0-9\s]', '', messageData);
 		words:list[str] = cleanedMessage.split(" ");
 		occurrencesUpdOccurrences(str(message.author), words);
 
