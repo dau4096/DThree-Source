@@ -109,7 +109,7 @@ def filePathSortFunction(a) -> bool:
 def searchArtbookIndexFileByList(tags:list[str]) -> list[str]:
 	total:set[str] = set(searchArtbookIndexFile(tags[0]));
 	if (len(tags) > 1):
-		for tag in tags[1:]: total = total.intersect(set(searchArtbookIndexFile(tag)));
+		for tag in tags[1:]: total = total.intersection(set(searchArtbookIndexFile(tag)));
 	return list(total);
 
 
