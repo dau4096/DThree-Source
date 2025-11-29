@@ -12,7 +12,7 @@ import random
 from exct.shared import removeNonASCII, sendMessage, replyMessage, getTime, timeSinceStr, secondsSince, formatNumber, formatName
 from exct.solver import solveEqu
 from exct.vibe import showSongs
-from exct.artbook import searchArtbookIndexFile
+from exct.artbook import searchArtbookIndexFile, getArtbookTags
 import math as maths
 import re as regex
 
@@ -531,6 +531,11 @@ async def checkReplies(messageData: str, message: discord.Message) -> None:
 			else:
 				await replyMessage(message, f"Could not find any relevant pages for '{tag}'", ping=True);
 			return;
+
+
+	if (messageData.startswith("/artbook-tags")):
+		tags:set[str] = getArtbookTags();
+		await replyMessage(message, f"All usable tags: {list(tags).sort()}");
 
 
 	if messageData.startswith("/serverage"):

@@ -122,6 +122,13 @@ def searchArtbookIndexFile(tag:str) -> list[str]:
 
 
 
+def getArtbookTags() -> set[str]:
+	result:set[str] = set();
+	[[tags.add(x) for x in book._tags] for book in BOOKS]
+	return result;
+
+
+
 parseIndexFile();
 if (__name__ == "__main__"):
 	#Debug
