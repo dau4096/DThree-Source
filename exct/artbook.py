@@ -106,6 +106,12 @@ def filePathSortFunction(a) -> bool:
 		return 0;
 
 
+def searchArtbookIndexFileByList(tags:list[str]) -> list[str]:
+	total:set[str] = set();
+	for tag in tags: total.union(set(searchArtbookIndexFile(tag)));
+	return list(total);
+
+
 def searchArtbookIndexFile(tag:str) -> list[str]:
 	relevantFilePaths:list[str] = [];
 	for book in BOOKS:
