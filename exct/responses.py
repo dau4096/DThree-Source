@@ -535,7 +535,7 @@ async def checkReplies(messageData: str, message: discord.Message) -> None:
 
 	if (messageData.startswith("/artbook-tags")):
 		tags:set[str] = getArtbookTags();
-		await replyMessage(message, f"All usable tags: {list(tags).sort()}");
+		await replyMessage(message, f"All usable tags: {[t.title() for t in tags].sort()}");
 
 
 	if messageData.startswith("/serverage"):

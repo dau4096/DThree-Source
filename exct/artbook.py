@@ -124,7 +124,7 @@ def searchArtbookIndexFile(tag:str) -> list[str]:
 
 def getArtbookTags() -> set[str]:
 	result:set[str] = set();
-	[[tags.add(x) for x in book._tags] for book in BOOKS]
+	[[result.add(x) for x in book._tags] for book in BOOKS]
 	return result;
 
 
