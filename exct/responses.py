@@ -517,6 +517,15 @@ async def checkReplies(messageData: str, message: discord.Message) -> None:
 		return
 
 
+	if (messageData.startswith("/artbook ")):
+		tag:str = regex.sub(r"(?i)^/artbook\s+", "", messageData);
+		print(tag);
+		if (len(tag) > 0):
+			filePaths:list[str] = searchIndexFile(tag);
+			print(filePaths);
+			return;
+
+
 	if messageData.startswith("/serverage"):
 		#Command to show length of time users have been on the server.
 		#Shown in order from longest to shortest times.
