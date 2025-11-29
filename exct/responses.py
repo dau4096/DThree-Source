@@ -520,13 +520,16 @@ async def checkReplies(messageData: str, message: discord.Message) -> None:
 
 	if (messageData.startswith("/artbook ")):
 		tag:str = regex.sub(r"(?i)^/artbook\s+", "", messageData);
-		print(tag);
 		if (len(tag) > 0):
 			filePaths:list[str] = searchArtbookIndexFile(tag);
-			await message.channel.send(
-				content=f"Found {len(filePaths)} images for {tag}",
-				files=[discord.File(path) for path in filePaths]
-			);
+			if (len(filePaths) > 0):
+				await message.reply(
+					content=f"Found {len(filePaths)} images for '{tag}';",
+					files=[discord.File(path) for path in filePaths],
+					mention_author=True
+				);
+			else:
+				await replyMessage(message, f"Could not find any relevant pages for '{tag}'", ping=True);
 			return;
 
 
