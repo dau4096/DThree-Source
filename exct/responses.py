@@ -523,7 +523,10 @@ async def checkReplies(messageData: str, message: discord.Message) -> None:
 		print(tag);
 		if (len(tag) > 0):
 			filePaths:list[str] = searchArtbookIndexFile(tag);
-			print(filePaths);
+			await message.channel.send(
+				content=f"Found {len(filePaths)} images for {tag}",
+				files=[discord.File(path) for path in filePaths]
+			);
 			return;
 
 

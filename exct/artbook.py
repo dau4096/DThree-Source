@@ -7,7 +7,6 @@ import random, os;
 
 global BOOKS, TAGS;
 ARTBOOK_DIR:str = f"{os.getenv('TXT_DIR')}/artbook";
-print(ARTBOOK_DIR);
 
 
 
