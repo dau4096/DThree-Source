@@ -6,8 +6,8 @@ import random, os;
 
 
 global BOOKS, TAGS;
-if (__name__ == "__main__"): ARTBOOK_DIR = f"../artbook";
-else: ARTBOOK_DIR:str = f"{os.getenv('TXT_DIR')}/artbook";
+ARTBOOK_DIR:str = f"{os.getenv('TXT_DIR')}/artbook";
+print(ARTBOOK_DIR);
 
 
 
@@ -120,7 +120,7 @@ def searchArtbookIndexFile(tag:str) -> list[str]:
 
 
 
+parseIndexFile();
 if (__name__ == "__main__"):
 	#Debug
-	parseIndexFile();
 	print(artbookSearch("/artbook concept"));
