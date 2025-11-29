@@ -2,6 +2,7 @@
 import xml.etree.ElementTree as ET;
 import re as regex;
 import random, os;
+import discord;
 
 
 
@@ -129,10 +130,13 @@ def searchArtbookIndexFile(tag:str) -> list[str]:
 
 
 
-def getArtbookTags() -> set[str]:
+def getArtbookTags() -> discord.File:
 	result:set[str] = set();
 	[[result.add(x) for x in book._tags] for book in BOOKS]
-	return result;
+	organised:str = "\n".join(sorted(list(result)));
+	tagFilePath:str = f"{os.getenv('DISK_DIR')}/data/tagFile.txt";
+	with open(tagFilePath, "w") as tagFile: tagFile.write(organised);
+	return discord.File(tagFilePath);
 
 
 
