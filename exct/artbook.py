@@ -104,7 +104,7 @@ def filePathSortFunction(a) -> bool:
 		return 0;
 
 
-def searchIndexFile(tag:str) -> list[str]:
+def searchArtbookIndexFile(tag:str) -> list[str]:
 	relevantFilePaths:list[str] = [];
 	for book in BOOKS:
 		if (tag not in book): continue; #Skip this book, as it doesnt contain the tag.

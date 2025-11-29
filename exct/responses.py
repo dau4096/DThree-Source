@@ -12,6 +12,7 @@ import random
 from exct.shared import removeNonASCII, sendMessage, replyMessage, getTime, timeSinceStr, secondsSince, formatNumber, formatName
 from exct.solver import solveEqu
 from exct.vibe import showSongs
+from exct.artbook import searchArtbookIndexFile
 import math as maths
 import re as regex
 
@@ -521,7 +522,7 @@ async def checkReplies(messageData: str, message: discord.Message) -> None:
 		tag:str = regex.sub(r"(?i)^/artbook\s+", "", messageData);
 		print(tag);
 		if (len(tag) > 0):
-			filePaths:list[str] = searchIndexFile(tag);
+			filePaths:list[str] = searchArtbookIndexFile(tag);
 			print(filePaths);
 			return;
 
