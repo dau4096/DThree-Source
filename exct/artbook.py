@@ -82,6 +82,8 @@ BOOKS:list[Book] = []; #All books in the index file.
 
 
 def parseIndexFile() -> None:
+	BOOKS = []; #Reset.
+
 	tree:ET = ET.parse(f"{ARTBOOK_DIR}/index.artbook.xml");
 	root:ET.Element = tree.getroot();
 

@@ -9,6 +9,7 @@ from exct.memeBrowse import browseMemes
 from exct.webSearch import lookUp
 from exct.shared import removeNonASCII, getTime, sendMessage, replyMessage, timeSinceStr, sendMessageInChannel
 from exct.shared import pullBackupData, backupData, updateRepo
+from exct.artbook import parseIndexFile
 import games.economy
 import games.BlackjackD3
 
@@ -46,6 +47,7 @@ async def backgroundActions(client: discord.Client) -> None:
 		#Get latest datafiles.
 		pullBackupData() 
 		await updateRepo(None)
+		parseIndexFile()
 
 		while not shutdownEvent.is_set():
 			await asyncio.sleep(3600) #60*60s, 1 hour.
@@ -115,6 +117,7 @@ async def otherTasks(message: discord.Message, messageData: str) -> None:
 
 	if messageData.startswith("/updaterepo"): #Update textfiles repo (pull)
 		await updateRepo(message=message)
+		parseIndexFile();
 		return
 
 	elif messageData.startswith("/backupdata"): #Push data files to git repo
