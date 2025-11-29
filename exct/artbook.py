@@ -110,6 +110,7 @@ def searchArtbookIndexFileByList(tags:list[str]) -> list[str]:
 	total:set[str] = set(searchArtbookIndexFile(tags[0]));
 	if (len(tags) > 1):
 		for tag in tags[1:]: total.union(set(searchArtbookIndexFile(tag)));
+	print(tags)
 	return list(total);
 
 
