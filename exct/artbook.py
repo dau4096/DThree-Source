@@ -7,7 +7,6 @@ import random, os;
 
 global BOOKS, TAGS;
 ARTBOOK_DIR:str = f"{os.getenv('TXT_DIR')}/artbook";
-print(ARTBOOK_DIR);
 
 
 
@@ -97,7 +96,7 @@ def parseIndexFile() -> None:
 def filePathSortFunction(a) -> bool:
 	try:
 		return int(regex.sub(
-			r"(?i)^.*/|\..*\.png$", "",
+			r"(?i)^.*/|\..*\.jpg$", "",
 			a
 		)); #Return just the page number.
 	except ValueError: #Failed to convert to int; filepath may be invalid.
