@@ -101,9 +101,9 @@ async def updateRepo(message:discord.Message|None=None, stdout:bool=True) -> Non
 	Otherwise prints confirmation to console.
 	"""
 	os.chdir(f"{os.getenv('TXT_DIR')}")
-    subprocess.run(["git", "fetch", "--all"], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
-    subprocess.run(["git", "reset", "--hard", "origin/main"], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
-    subprocess.run(["git", "pull", "origin", "main"], stdout=subprocess.DEs.run(["git", "reset", "--hard", "origin/main"], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+	subprocess.run(["git", "fetch", "--all"], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL);
+	subprocess.run(["git", "reset", "--hard", "origin/main"], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL);
+	subprocess.run(["git", "pull", "origin", "main"], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL);
 
 	if (message is not None):
 		await replyMessage(message, "Files are now up to date.", ping=True);
@@ -113,46 +113,46 @@ async def updateRepo(message:discord.Message|None=None, stdout:bool=True) -> Non
 
 
 def ensureRemote(dataDir: str, repoURL: str) -> None:
-    if not os.path.exists(os.path.join(dataDir, ".git")):
-        subprocess.run(["git", "init"], cwd=dataDir, check=True)
-        subprocess.run(["git", "remote", "add", "origin", repoURL], cwd=dataDir, check=True)
-    else:
-        subprocess.run(["git", "remote", "set-url", "origin", repoURL], cwd=dataDir, check=True)
+	if not os.path.exists(os.path.join(dataDir, ".git")):
+		subprocess.run(["git", "init"], cwd=dataDir, check=True)
+		subprocess.run(["git", "remote", "add", "origin", repoURL], cwd=dataDir, check=True)
+	else:
+		subprocess.run(["git", "remote", "set-url", "origin", repoURL], cwd=dataDir, check=True)
 
 
 def backupData(showOutput: bool=True) -> None:
-    """
-    Pushes datafiles to external backup repo
-    """
+	"""
+	Pushes datafiles to external backup repo
+	"""
 
-    dataDir = f"{os.getenv('DISK_DIR')}/data"
-    repoURL = f"https://x-access-token:{os.getenv('GITHUB_TOKEN')}@github.com/dau4096/DThree-Data-Backups.git"
+	dataDir = f"{os.getenv('DISK_DIR')}/data"
+	repoURL = f"https://x-access-token:{os.getenv('GITHUB_TOKEN')}@github.com/dau4096/DThree-Data-Backups.git"
 
 
-    output = None if showOutput else subprocess.DEVNULL;
-    def run(cmd, check: bool=True) -> None:
-    	subprocess.run(cmd, cwd=dataDir, check=check, stdout=output, stderr=output);
-    ensureRemote(dataDir, repoURL)
+	output = None if showOutput else subprocess.DEVNULL;
+	def run(cmd, check: bool=True) -> None:
+		subprocess.run(cmd, cwd=dataDir, check=check, stdout=output, stderr=output);
+	ensureRemote(dataDir, repoURL)
 
-    run(["git", "config", "user.email", "d3@render.com"])
-    run(["git", "config", "user.name", "DThree"])
-    run(["git", "add", "."])
-    run(["git", "commit", "-m", f"{datetime.datetime.now()}"], check=False)
-    run(["git", "branch", "-M", "main"])
-    run(["git", "push", "-u", "origin", "main"])
+	run(["git", "config", "user.email", "d3@render.com"])
+	run(["git", "config", "user.name", "DThree"])
+	run(["git", "add", "."])
+	run(["git", "commit", "-m", f"{datetime.datetime.now()}"], check=False)
+	run(["git", "branch", "-M", "main"])
+	run(["git", "push", "-u", "origin", "main"])
 
 
 def pullBackupData() -> None:
-    """
-    Pulls datafiles from external backup repo
-    """
-    dataDir = f"{os.getenv('DISK_DIR')}/data"
-    repoURL = f"https://x-access-token:{os.getenv('GITHUB_TOKEN')}@github.com/dau4096/DThree-Data-Backups.git"
+	"""
+	Pulls datafiles from external backup repo
+	"""
+	dataDir = f"{os.getenv('DISK_DIR')}/data"
+	repoURL = f"https://x-access-token:{os.getenv('GITHUB_TOKEN')}@github.com/dau4096/DThree-Data-Backups.git"
 
-    ensureRemote(dataDir, repoURL)
+	ensureRemote(dataDir, repoURL)
 
-    subprocess.run(["git", "fetch", "origin", "main"], cwd=dataDir, check=True)
-    subprocess.run(["git", "reset", "--hard", "origin/main"], cwd=dataDir, check=True)
+	subprocess.run(["git", "fetch", "origin", "main"], cwd=dataDir, check=True)
+	subprocess.run(["git", "reset", "--hard", "origin/main"], cwd=dataDir, check=True)
 
 
 
