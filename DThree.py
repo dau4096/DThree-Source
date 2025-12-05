@@ -41,7 +41,6 @@ signal.signal(signal.SIGUSR1, handleShutdown);
 def cmdListern():
     for line in sys.stdin:
         cmd = line.strip()
-        print(f"[DThree] Command received: {cmd}")
         cmdHandle(cmd)
 
 def cmdHandle(cmd:str) -> None:
