@@ -44,7 +44,28 @@ def cmdListern():
         cmdHandle(cmd)
 
 def cmdHandle(cmd:str) -> None:
-	result = cmd.strip() + "\n";
+	result = "";
+	match (cmd):
+		case "fetch":
+			await updateRepo(None);
+			parseIndexFile();
+			result = "Successfully pulled textFile data.";
+			break;
+
+		case "push":
+			backupData();
+			result = "Successfully pushed ~/disk/data";
+			break;
+
+		case "pull":
+			pullBackupData();
+			result = "Successfully pulled ~/disk/data";
+			break;
+
+		case _:
+			result = f"Unknown command: {cmd}";
+			break;
+
 	print(result, flush=True);
 
 listener = threading.Thread(target=cmdListern, daemon=True);
