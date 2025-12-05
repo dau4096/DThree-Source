@@ -134,7 +134,7 @@ def backupData(showOutput: bool=True) -> None:
 		subprocess.run(cmd, cwd=dataDir, check=check, stdout=output, stderr=output);
 	ensureRemote(dataDir, repoURL)
 
-	run(["git", "config", "user.email", "d3@render.com"])
+	run(["git", "config", "user.email", "d3@github.com"])
 	run(["git", "config", "user.name", "DThree"])
 	run(["git", "add", "."])
 	run(["git", "commit", "-m", f"{datetime.datetime.now()}"], check=False)
