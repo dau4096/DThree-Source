@@ -49,7 +49,7 @@ async def cmdHandle(cmd:str) -> None:
 	result = "";
 	match (cmd):
 		case "fetch":
-			await updateRepo(None);
+			await updateRepo(None, stdout=False);
 			parseIndexFile();
 			result = "Successfully pulled textFile data.";
 
