@@ -39,11 +39,13 @@ signal.signal(signal.SIGUSR1, handleShutdown);
 
 #HTTP
 def cmdListern():
-    for line in sys.stdin:
-        cmd = line.strip()
-        cmdHandle(cmd)
+	loop = asyncio.new_event_loop()
+	asyncio.set_event_loop(loop)
+	for line in sys.stdin:
+		cmd = line.strip()
+		loop.run_until_complete(cmdHandle(cmd))
 
-def cmdHandle(cmd:str) -> None:
+async def cmdHandle(cmd:str) -> None:
 	result = "";
 	match (cmd):
 		case "fetch":
