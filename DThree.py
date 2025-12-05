@@ -61,6 +61,9 @@ async def cmdHandle(cmd:str) -> None:
 			pullBackupData();
 			result = "Successfully pulled ~/disk/data";
 
+		case "uptime":
+			result = f"Uptime: {getUptime()}";
+
 		case _:
 			result = f"Unknown command: {cmd}";
 
@@ -68,6 +71,28 @@ async def cmdHandle(cmd:str) -> None:
 
 listener = threading.Thread(target=cmdListern, daemon=True);
 listener.start();
+
+
+
+def getUptime() -> str:
+	currentTime = time.time()
+	uptime = currentTime - D3StartTime
+
+
+	days = int(uptime // 84600 % 365)
+	hours = int(uptime // 3600 % 24)
+	minutes = int(uptime // 60 % 60)
+	seconds = int(uptime % 60)
+	uptimeStr = ""
+	if days > 0:
+		uptimeStr += f"{days} days, "
+	if hours > 0 or days > 0:
+		uptimeStr += f"{hours} hours, "
+	if minutes > 0 or hours > 0 or days > 0:
+		uptimeStr += f"{minutes} minutes "
+	uptimeStr += f"{seconds} seconds."
+
+	return uptimeStr;
 
 
 
@@ -171,24 +196,7 @@ async def otherTasks(message: discord.Message, messageData: str) -> None:
 
 
 	elif messageData.startswith("/uptime"): #Time DThree has been online for.
-		currentTime = time.time()
-		uptime = currentTime - D3StartTime
-
-
-		days = int(uptime // 84600 % 365)
-		hours = int(uptime // 3600 % 24)
-		minutes = int(uptime // 60 % 60)
-		seconds = int(uptime % 60)
-		uptimeStr = ""
-		if days > 0:
-			uptimeStr += f"{days} days, "
-		if hours > 0 or days > 0:
-			uptimeStr += f"{hours} hours, "
-		if minutes > 0 or hours > 0 or days > 0:
-			uptimeStr += f"{minutes} minutes "
-		uptimeStr += f"{seconds} seconds."
-
-
+		uptimeStr = getUptime();
 		timeSinceCreationStr = timeSinceStr("2024-09-01 08:00:00")
 
 		await replyMessage(message, f"DThree has been online for: {uptimeStr}\nTime since DThree was created: {timeSinceCreationStr}", ping=True)
