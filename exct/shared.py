@@ -93,7 +93,7 @@ async def replyMessage(message: discord.Message, messageText: str, ping: bool=Tr
 
 
 
-async def updateRepo(message: discord.Message|None=None) -> None:
+async def updateRepo(message:discord.Message|None=None, stdout:bool=True) -> None:
 	"""
 	Updates the textfiles from [https://github.com/dau4096/DThree-Files].
 	This is called every time DThree is deployed, and also whenever "/updaterepo" is called.
@@ -101,14 +101,14 @@ async def updateRepo(message: discord.Message|None=None) -> None:
 	Otherwise prints confirmation to console.
 	"""
 	os.chdir(f"{os.getenv('TXT_DIR')}")
-	subprocess.run(["git", "fetch", "--all"])  #Fetch all branches
-	subprocess.run(["git", "reset", "--hard", "origin/main"])  #Reset local branch
-	subprocess.run(["git", "pull", "origin", "main"])  #Pull changes
-	
-	if message is not None:
-		await replyMessage(message, "Files are now up to date.", ping=True)
-	else:
-		print("Files are now up to date.")
+    subprocess.run(["git", "fetch", "--all"], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+    subprocess.run(["git", "reset", "--hard", "origin/main"], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+    subprocess.run(["git", "pull", "origin", "main"], stdout=subprocess.DEs.run(["git", "reset", "--hard", "origin/main"], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+
+	if (message is not None):
+		await replyMessage(message, "Files are now up to date.", ping=True);
+	elif (stdout):
+		print("Files are now up to date.");
 
 
 
