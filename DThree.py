@@ -47,6 +47,7 @@ def cmdListern():
 
 async def cmdHandle(cmd:str) -> None:
 	result = "";
+	print(cmd)
 	match (cmd):
 		case "fetch":
 			await updateRepo(None, stdout=False);
