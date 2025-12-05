@@ -45,7 +45,7 @@ def cmdListern():
         cmdHandle(cmd)
 
 def cmdHandle(cmd:str) -> None:
-	result = cmd;
+	result = cmd.strip() + "\n";
 	print(result, flush=True);
 
 listener = threading.Thread(target=cmdListern, daemon=True);
