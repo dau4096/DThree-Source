@@ -1,7 +1,7 @@
 import discord, asyncio, random, importlib, os, subprocess, datetime, time
 from dotenv import load_dotenv
 load_dotenv()
-import signal, sys
+import signal, sys, threading;
 from games.chess import checkChessGames, testImage
 from games.noughtsAndCrosses import checkNoughtsAndCrossesGames
 from exct.responses import checkReplies, replyToCorrection
@@ -27,7 +27,7 @@ shutdownEvent = asyncio.Event();
 
 
 
-
+#Handle incoming signals (SIGUSER1, HTTP requests)
 def handleShutdown(signum, frame) -> None:
 	#Shutdown via management program. Non-negotiable, but allows time for graceful closure.
 	games.economy.writeCSV(f"{os.getenv('DISK_DIR')}/data/econ.csv");
@@ -36,6 +36,19 @@ def handleShutdown(signum, frame) -> None:
 	sys.exit(0);
 
 signal.signal(signal.SIGUSR1, handleShutdown);
+
+#HTTP
+def cmdListern():
+    for line in sys.stdin:
+        cmd = line.strip()
+        print(f"[DThree] Command received: {cmd}")
+        cmdHandle(cmd)
+
+def cmdHandle(cmd:str) -> None:
+	print(cmd);
+
+listener = threading.Thread(target=cmdListern, daemon=True);
+listener.start();
 
 
 
