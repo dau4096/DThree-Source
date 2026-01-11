@@ -156,7 +156,7 @@ async def otherTasks(message: discord.Message, messageData: str) -> None:
 				wordsSinceSpanishInquisition += 1
 				if wordsSinceSpanishInquisition > 1023:
 					if (random.randint(0, 1023) == 127) or (wordsSinceSpanishInquisition > 2047):
-						await message.reply(file=discord.File(f"{os.getenv('DISK_DIR')}/data/Inquisition.gif"), mention_author=True)
+						await message.reply(file=discord.File(f"{os.getenv('SRC_DIR')}/imgs/Inquisition.gif"), mention_author=True)
 						wordsSinceSpanishInquisition = 0
 			else:
 				#If file gets OBLITERATED again, repopulate it.

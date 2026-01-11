@@ -266,7 +266,7 @@ async def occurrencesSaveGraph(word: str, message: discord.Message, filename: st
 
 	# Save
 	fig.savefig(
-		f"{os.getenv('DISK_DIR')}/data/graph.png",
+		f"{os.getenv('DISK_DIR')}/imgs/graph.png",
 		facecolor=fig.get_facecolor(),
 		transparent=False
 	)
@@ -274,7 +274,7 @@ async def occurrencesSaveGraph(word: str, message: discord.Message, filename: st
 
 
 	await sendMessage(message, f'Collating data for "{word}"')
-	await message.channel.send(file=discord.File(f"{os.getenv('DISK_DIR')}/data/graph.png"))
+	await message.channel.send(file=discord.File(f"{os.getenv('DISK_DIR')}/imgs/graph.png"))
 	#If multiple people request a graph simultaneously; it gets overwritten. Consider fixing.
 
 
@@ -338,7 +338,7 @@ async def occurrencesSaveDailyGraph(message: discord.Message, filename: str=f"{o
 	ax.grid(True, linestyle="--", linewidth=0.5, color="gray");
 	fig.autofmt_xdate();
 
-	savePath:str = f"{os.getenv('DISK_DIR')}/data/graph.png";
+	savePath:str = f"{os.getenv('DISK_DIR')}/imgs/graph.png";
 	fig.savefig(savePath, facecolor=fig.get_facecolor(), transparent=False);
 	plt.close(fig);
 
