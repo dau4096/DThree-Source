@@ -275,10 +275,10 @@ async def testImage(message):
 				for X, tile in enumerate(row):
 					if tile != 0:
 						team = 0 if False else 1 #Add teams later
-						drawImg(surface, "sheet-1.png", (X*128, Y*128), (128, 128), sheetPos=f"{team}{tile}")
+						drawImg(surface, f"{os.getenv('SRC_DIR')}/imgs/sheet-1.png", (X*128, Y*128), (128, 128), sheetPos=f"{team}{tile}")
 			PG.display.flip()
-			PG.image.save(surface, "imgs/board.png")
-			await message.channel.send(file=discord.File("imgs/board.png"))
+			PG.image.save(surface, f"{os.getenv('SRC_DIR')}/imgs/board.png")
+			await message.channel.send(file=discord.File(f"{os.getenv('SRC_DIR')}/imgs/board.png"))
 
 
 
@@ -287,8 +287,8 @@ async def testImage(message):
 			drawImg(surface, "test.png", (0, 0), (128, 128))
 			drawImg(surface, "sheet-1.png", (128, 0), (128, 128), sheetPos="15")
 			PG.display.flip()
-			PG.image.save(surface, f"{os.getenv('SRC_DIR')}imgs/board.png")
-			await message.channel.send(file=discord.File("imgs/board.png"))
+			PG.image.save(surface, f"{os.getenv('SRC_DIR')}/imgs/board.png")
+			await message.channel.send(file=discord.File(f"{os.getenv('SRC_DIR')}/imgs/board.png"))
 
 
 
