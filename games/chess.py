@@ -285,7 +285,7 @@ async def testImage(message):
 
 		else:
 			drawImg(surface, "test.png", (0, 0), (128, 128))
-			drawImg(surface, "{sheet-1.png", (128, 0), (128, 128), sheetPos="15")
+			drawImg(surface, "sheet-1.png", (128, 0), (128, 128), sheetPos="15")
 			PG.display.flip()
 			PG.image.save(surface, f"{os.getenv('DISK_DIR')}/imgs/board.png")
 			await message.channel.send(file=discord.File(f"{os.getenv('DISK_DIR')}/imgs/board.png"))
