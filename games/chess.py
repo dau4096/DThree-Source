@@ -275,7 +275,7 @@ async def testImage(message):
 				for X, tile in enumerate(row):
 					if tile != 0:
 						team = 0 if False else 1 #Add teams later
-						drawImg(surface, f"{os.getenv('SRC_DIR')}/imgs/sheet-1.png", (X*128, Y*128), (128, 128), sheetPos=f"{team}{tile}")
+						drawImg(surface, "sheet-1.png", (X*128, Y*128), (128, 128), sheetPos=f"{team}{tile}")
 			PG.display.flip()
 			PG.image.save(surface, f"{os.getenv('DISK_DIR')}/imgs/board.png")
 			await message.channel.send(file=discord.File(f"{os.getenv('DISK_DIR')}/imgs/board.png"))
@@ -284,8 +284,8 @@ async def testImage(message):
 
 
 		else:
-			drawImg(surface, f"{os.getenv('SRC_DIR')}/test.png", (0, 0), (128, 128))
-			drawImg(surface, f"{os.getenv('SRC_DIR')}/sheet-1.png", (128, 0), (128, 128), sheetPos="15")
+			drawImg(surface, "test.png", (0, 0), (128, 128))
+			drawImg(surface, "{sheet-1.png", (128, 0), (128, 128), sheetPos="15")
 			PG.display.flip()
 			PG.image.save(surface, f"{os.getenv('DISK_DIR')}/imgs/board.png")
 			await message.channel.send(file=discord.File(f"{os.getenv('DISK_DIR')}/imgs/board.png"))
@@ -315,7 +315,7 @@ def drawText(SCREEN, TEXT, POSITION, FONT_SIZE, COLOUR=(255, 255, 255)):
 def drawImg(surface, filename, position, scale, sheetPos=None):
 	#Draws an image loaded from the file structure (in \src\imgs\) to a position and with scale.
 	#Taken from older project.
-	img = PG.image.load(f"{os.getenv('SRC_DIR')}imgs\\{filename}")
+	img = PG.image.load(f"{os.getenv('SRC_DIR')}/imgs/{filename}")
 	w,h = img.get_width(), img.get_height()
 
 	if sheetPos is not None:
