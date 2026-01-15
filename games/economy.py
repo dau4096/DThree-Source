@@ -29,6 +29,8 @@ factoryTypes = {
 	"millitary": {"income": 12500.0, "expenses": 5000.0, "speed": 0.5, "buildCost": 32000.0},
 	"ships": {"income": 50000.0, "expenses": 5000.0, "speed": 0.125, "buildCost": 125000.0},
 	"cars": {"income": 15000.0, "expenses": 3000.0, "speed": 0.25, "buildCost": 32000.0},
+	"electric_equipment": {"income": 7000.0, "expenses": 2500, "speed": 0.65, "buildCost": 40500.0},
+	"industrial_machinery": {"income": 35000.0, "expenses": 4500.0, "speed": 0.35, "buildCost": 75000.0},
 }
 propertyCosts = {
 	"hlaford": 8000.0,
