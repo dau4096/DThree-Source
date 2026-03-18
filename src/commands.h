@@ -14,12 +14,6 @@ static types::CommandRegistry cmdRegistry;
 namespace cmdDefinition {
 
 
-
-void testDef(const dpp::slashcommand_t& event) {
-	event.reply("Testing!");
-}
-
-
 void help(const dpp::slashcommand_t& event) {
 	std::string cmdName = std::get<std::string>(event.get_parameter("command"));
 	std::string message = "";
@@ -35,12 +29,15 @@ void help(const dpp::slashcommand_t& event) {
 
 	} else {
 		types::Command cmd;
+		#ifdef VERBOSE
+		std::cout << std::format("Requested help for {}", cmdName) << std::endl;
+		#endif
 		if (cmdRegistry.get(cmdName, &cmd)) {
 			//Success, found command with that name.
 			message = std::format("***/{}:***  \"{}\"", cmdName, cmd.help);
 		} else {
 			//Could not find command with that name.
-			message = std::format("Unknown command name: {}. Use `/help list` to show all command names.", cmdName);
+			message = std::format("Unknown command name: \"{}\". Use `/help list` to show all command names.", cmdName);
 		}
 	}
 
@@ -84,6 +81,10 @@ void phrase(const dpp::slashcommand_t& event) {
 		message = std::format(
 			"> _\"{}\"_\n\\- _{}_", phrases.at(randomIndex), phraseFile
 		);
+
+		#ifdef VERBOSE
+		std::cout << std::format("Giving line {} from {} ({})", randomIndex, phraseFile, phrases.at(randomIndex)) << std::cout;
+		#endif
 	}
 
 	event.reply(message);
@@ -100,8 +101,9 @@ void vibe(const dpp::slashcommand_t& event) {
 	utils::toLower(metric);
 	utils::toLower(value);
 
+	#ifdef VERBOSE
 	std::cout << std::format("Searching for {} = {}", metric, value) << std::endl;
-
+	#endif
 
 	//Search by metric;
 	dpp::message msg = vibe::query(metric, value);
@@ -118,7 +120,14 @@ namespace cmd {
 
 //All Command instances to be added.
 static const std::vector<types::Command> commandList = {
-	types::Command("testing", "Tests", "If quizzes are quizzical..", cmdDefinition::testDef),
+	types::Command(
+		"echo", "Echoes a message", "Repeats whatever message you give it.",
+		[](const dpp::slashcommand_t& event) {
+			event.reply(std::get<std::string>(event.get_parameter("message")));
+		}, {
+			dpp::command_option(dpp::co_string, "message", "Message to echo", true)
+		}
+	),
 
 	types::Command(
 		"help", "Get help about another command.", "Displays help for another command.",
@@ -141,30 +150,8 @@ static const std::vector<types::Command> commandList = {
 };
 
 
-void examples() {
-	//Some example commands for my own ref, using lambda funcs.
-	cmdRegistry.add(types::Command("ping", "Is it on?", "Tests the bot", [](const dpp::slashcommand_t& event) {
-		event.reply("Yeah :)");
-	}));
-
-	cmdRegistry.add(types::Command("hello", "hi", "Says hi", [](const dpp::slashcommand_t& event) {
-		event.reply("hi");
-	}));
-
-	cmdRegistry.add(types::Command("echo", "echos an arg", "Works like the terminal command",
-		[](const dpp::slashcommand_t& event){
-			std::string arg = std::get<std::string>(event.get_parameter("arg"));
-			event.reply(arg);
-		},
-		{dpp::command_option(dpp::co_string, "arg", "What to echo", true)}
-	));
-}
-
-
 void define() {
 	//Define commands.
-	examples();
-
 	for (const types::Command& cmd : commandList) {
 		//Add to cmdRegistry.
 		cmdRegistry.add(cmd);

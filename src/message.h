@@ -51,8 +51,9 @@ void inquisition(const dpp::message_create_t& event) {
 		return;
 	}
     #ifdef ON_MSG_DEBUG
-	outFile << "messagesSinceLastInquisition: " << messagesSinceLastInquisition << "\n";
+    std::cout << "messagesSinceLastInquisition: " << messagesSinceLastInquisition << std::endl;
 	#endif
+	outFile << messagesSinceLastInquisition << "\n";
 }
 
 
