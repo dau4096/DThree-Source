@@ -35,14 +35,19 @@ int main() {
 	    //Ignore bots (including itself)
 	    if (event.msg.author.is_bot()) {return;}
 
-	    #ifdef ON_MSG_DEBUG
 	    const std::string& content = event.msg.content;
+	    const std::string& username = event.msg.author.username;
+	    #ifdef ON_MSG_DEBUG
 	    std::cout << std::format(
 	    	"{} [{}]: {}",
 	    	event.msg.member.get_nickname(),
-	    	event.msg.author.username, content
+	    	username, content
 	    ) << std::endl;
 	    #endif
+
+	    onMessage::inquisition(event);
+	    onMessage::logWords(content, username);
+
 	});
 
 	//Handle /commands

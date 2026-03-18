@@ -1,4 +1,4 @@
 .env
 prgm
 *.o
-DISK/*
+DISK/RWM/*
