@@ -36,6 +36,26 @@ std::string& get(const std::string& name) {
 }
 
 
+
+namespace utils {
+
+void toUpper(std::string& text) {
+    std::transform(
+    	text.begin(), text.end(), text.begin(),
+    	[](unsigned char c){return std::toupper(c);}
+    );
+}
+void toLower(std::string& text) {
+    std::transform(
+    	text.begin(), text.end(), text.begin(),
+    	[](unsigned char c){return std::tolower(c);}
+    );
+}
+
+}
+
+
+
 namespace file {
 
 static std::string readFile(const std::string& filePath) {
@@ -47,6 +67,21 @@ static std::string readFile(const std::string& filePath) {
 	std::ostringstream buffer;
 	buffer << fileStream.rdbuf();
 	return buffer.str();
+}
+
+
+std::vector<std::string> readFileLines(const std::string& filePath) {
+	std::string text = readFile(filePath);
+
+    std::vector<std::string> lines;
+    std::stringstream ss(text);
+    std::string line;
+
+    while (std::getline(ss, line)) {
+        lines.push_back(line);
+    }
+
+    return lines;
 }
 
 

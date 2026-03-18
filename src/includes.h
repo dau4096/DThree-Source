@@ -7,9 +7,11 @@
 //////// C STD SUBHEADERS ////////
 #include <cstdio>
 #include <cstdint>
+#include <cstdlib>
 
 #include <cstring>
 #include <cmath>
+#include <ctime>
 //////// C STD SUBHEADERS ////////
 
 

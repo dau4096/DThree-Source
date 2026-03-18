@@ -15,6 +15,7 @@ int main() {
 		env::get("BOT_TOKEN"),
 		dpp::i_default_intents | dpp::i_message_content //Intents
 	);
+	srand(time(0)); //Randomise seed based on time.
 
 
 	cmd::define(); //Add commands.
