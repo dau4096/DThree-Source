@@ -4,13 +4,20 @@
 
 
 #include "includes.h"
-#include "utils.h"
+#include "env.h"
+
+
+
+enum SongEntryType {
+	SET_INVALID, //No provided link/URL/path.
+	SET_URL, //Web URL, youtube/spotify/etc.
+	SET_FILEPATH //Local filepath to a compatible audio file.
+};
 
 
 namespace types {
 
-class Command {
-public:
+struct Command {
 	std::string name;
 	std::string description;
 	std::string help;
@@ -21,7 +28,7 @@ public:
 
 	Command(
 		const std::string& n, const std::string& d, const std::string& h,
-		std::function<void(const dpp::slashcommand_t&)> cb, const std::vector<dpp::command_option>& opts = {}
+		std::function<void(const dpp::slashcommand_t&)> cb, const std::vector<dpp::command_option>& opts={}
 	)	: name(n), description(d), help(h), callback(cb), options(opts) {}
 };
 
@@ -68,6 +75,22 @@ public:
 		return false; //Failed to find.
 
 	}
+};
+
+
+
+struct Song {
+	unsigned int ID; //Unique ID
+	std::string name; //What is it called?
+	std::vector<std::string> artist; //Who made it?
+	unsigned int duration; //How long, in seconds?
+	std::vector<std::string> genre; //What genres does it fit into?
+	std::string suggestedBy; //User
+	std::string URL; //Or filepath.
+	SongEntryType type; //What sort of URL/filepath it is.
+	std::vector<std::string> intensity; //How intense is it?
+	std::vector<std::string> mood; //What moods is this song?
+	std::vector<std::string> association; //Where is it from?
 };
 
 }

@@ -3,6 +3,9 @@
 #define MESSAGE_H
 
 
+#include "env.h"
+
+
 namespace onMessage {
 
 
@@ -50,7 +53,6 @@ void inquisition(const dpp::message_create_t& event) {
     #ifdef ON_MSG_DEBUG
 	outFile << "messagesSinceLastInquisition: " << messagesSinceLastInquisition << "\n";
 	#endif
-	std::cout << messagesSinceLastInquisition << std::endl;
 }
 
 

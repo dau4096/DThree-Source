@@ -25,11 +25,16 @@
 #include <sstream>
 
 #include <fstream>
+#include <regex>
+#include <random>
 //////// C++ STD SUBHEADERS ////////
 
 
 //////// MISC. ////////
+//D++
 #include <dpp/dpp.h>
+//PugiXML
+#include <pugixml.hpp>
 //////// MISC. ////////
 
 

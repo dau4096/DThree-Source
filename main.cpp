@@ -2,6 +2,7 @@
 
 
 #include "src/includes.h" //General includes.
+#include "src/env.h"      //.env loading & parsing.
 #include "src/types.h"    //Typedefs & Classes
 #include "src/utils.h"    //Utility functions
 #include "src/commands.h" //For general user commands.
@@ -9,21 +10,23 @@
 
 
 
+void init();
+
+
+
 int main() {
-	env::load();
+	init();
+
 	dpp::cluster D6 = dpp::cluster(
 		env::get("BOT_TOKEN"),
 		dpp::i_default_intents | dpp::i_message_content //Intents
 	);
-	srand(time(0)); //Randomise seed based on time.
 
-
-	cmd::define(); //Add commands.
 	types::CommandRegistry& reg = cmdRegistry;
 
 
 	//Register commands w/ descs
-	D6.on_ready([&D6, &reg](const dpp::ready_t& event) {
+	D6.on_ready([&D6, &reg](const dpp::ready_t&) {
 		if (dpp::run_once<struct register_D6_commands>()) {
 	        D6.global_bulk_command_delete(); //Delete globals (Not needed)
 			cmdRegistry.register_all(D6); //Register commands
@@ -63,3 +66,14 @@ int main() {
 	return 0;
 }
 
+
+
+
+
+void init(void) {
+	env::load();
+	srand(time(0)); //Randomise seed based on time.
+
+	xml::loadVibeXML(); //Load vibe/songData.xml
+	cmd::define(); //Add commands.
+}

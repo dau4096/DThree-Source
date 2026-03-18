@@ -3,6 +3,11 @@
 #define COMMANDS_H
 
 
+#include "env.h"
+#include "types.h"
+#include "vibe.h"
+
+
 static types::CommandRegistry cmdRegistry;
 
 //Definitions of commands.
@@ -32,7 +37,7 @@ void help(const dpp::slashcommand_t& event) {
 		types::Command cmd;
 		if (cmdRegistry.get(cmdName, &cmd)) {
 			//Success, found command with that name.
-			message = std::format("{}: \"{}\"", cmdName, cmd.help);
+			message = std::format("***/{}:***  \"{}\"", cmdName, cmd.help);
 		} else {
 			//Could not find command with that name.
 			message = std::format("Unknown command name: {}. Use `/help list` to show all command names.", cmdName);
@@ -86,6 +91,24 @@ void phrase(const dpp::slashcommand_t& event) {
 
 
 
+void vibe(const dpp::slashcommand_t& event) {
+	//Allows the user to search by some metric (who made it, title, genre etc) or get a random set.
+	std::string metric = std::get<std::string>(event.get_parameter("metric")); //What to search by
+	std::string value = std::get<std::string>(event.get_parameter("query")); //Value to search for
+
+	//Convert to lowercase.
+	utils::toLower(metric);
+	utils::toLower(value);
+
+	std::cout << std::format("Searching for {} = {}", metric, value) << std::endl;
+
+
+	//Search by metric;
+	dpp::message msg = vibe::query(metric, value);
+	event.reply(msg);
+}
+
+
 }
 
 
@@ -105,6 +128,15 @@ static const std::vector<types::Command> commandList = {
 	types::Command(
 		"phrase", "Sends a random phrase from a given file.", "Selects a line from a given file at random, to send. Uses the original filenames D3 used, such as `/cesko` → `/phrase cesko`.",
 		cmdDefinition::phrase, {dpp::command_option(dpp::co_string, "file", "File to read from.", true)}
+	),
+
+	types::Command(
+		"vibe", "Search for a song.",
+		"Either search for a specific song, or get a random selection. Search options (Metrics):\n- ID\n- name\n- artist\n- duration\n- genre\n- suggestedBy\n- intensity\n- mood\n- association\n- random",
+		cmdDefinition::vibe, {
+			dpp::command_option(dpp::co_string, "metric", "What metric to search by.", true),
+			dpp::command_option(dpp::co_string, "query", "The value to search for.", true)
+		}
 	),
 };
 
