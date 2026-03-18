@@ -17,6 +17,8 @@ public:
 	std::function<void(const dpp::slashcommand_t&)> callback;
 	std::vector<dpp::command_option> options; //Args
 
+	Command() : name(""), description(""), help(""), callback(), options() {}
+
 	Command(
 		const std::string& n, const std::string& d, const std::string& h,
 		std::function<void(const dpp::slashcommand_t&)> cb, const std::vector<dpp::command_option>& opts = {}
@@ -41,7 +43,9 @@ public:
 				sc.add_option(opt);
 			}
 
+			//One for D's repo, one for SW GC.
 			D6.guild_command_create(sc, env::get("DR_ID"));
+			//D6.guild_command_create(sc, env::get("SWGC_ID")); //Disabled for now.
 		}
 	}
 	

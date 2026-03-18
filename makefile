@@ -1,5 +1,5 @@
 CC = g++
-CFLAGS = -std=c++23 -O2 -ffast-math -g -Wall -Wextra
+CFLAGS = -std=c++23 -O2 -ffast-math -Wall -Wextra
 LDFLAGS = -I/usr/include \
          -I/usr/include/GL \
          -I/usr/include/glm \

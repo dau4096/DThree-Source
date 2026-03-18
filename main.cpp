@@ -18,14 +18,14 @@ int main() {
 
 
 	cmd::define(); //Add commands.
-	types::CommandRegistry& reg = cmd::registry;
+	types::CommandRegistry& reg = cmdRegistry;
 
 
 	//Register commands w/ descs
 	D6.on_ready([&D6, &reg](const dpp::ready_t& event) {
 		if (dpp::run_once<struct register_D6_commands>()) {
 	        D6.global_bulk_command_delete(); //Delete globals (Not needed)
-			cmd::registry.register_all(D6); //Register commands
+			cmdRegistry.register_all(D6); //Register commands
 		}
 	});
 
@@ -34,23 +34,24 @@ int main() {
 	    //Ignore bots (including itself)
 	    if (event.msg.author.is_bot()) {return;}
 
-
+	    #ifdef ON_MSG_DEBUG
 	    const std::string& content = event.msg.content;
 	    std::cout << std::format(
 	    	"{} [{}]: {}",
 	    	event.msg.member.get_nickname(),
 	    	event.msg.author.username, content
 	    ) << std::endl;
+	    #endif
 	});
 
 	//Handle /commands
 	D6.on_slashcommand([&reg](const dpp::slashcommand_t& event) {
-		cmd::registry.handle_command(event);
+		cmdRegistry.handle_command(event);
 	});
 
 
 	//Run D6.
-	std::cout << "Running D6..\n^C to exit." << std::endl;
+	std::cout << "\nRunning D6..\n^C to exit." << std::endl;
 	D6.start(dpp::st_wait);
 
 	return 0;
