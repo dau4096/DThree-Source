@@ -52,7 +52,7 @@ public:
 
 			//One for D's repo, one for SW GC.
 			D6.guild_command_create(sc, env::get("DR_ID"));
-			//D6.guild_command_create(sc, env::get("SWGC_ID")); //Disabled for now.
+			D6.guild_command_create(sc, env::get("SWGC_ID")); //Disabled for now.
 		}
 	}
 	
