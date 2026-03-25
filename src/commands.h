@@ -6,6 +6,7 @@
 #include "env.h"
 #include "types.h"
 #include "vibe.h"
+#include "words.h"
 
 
 static types::CommandRegistry cmdRegistry;
@@ -83,7 +84,7 @@ void phrase(const dpp::slashcommand_t& event) {
 		);
 
 		#ifdef VERBOSE
-		std::cout << std::format("Giving line {} from {} ({})", randomIndex, phraseFile, phrases.at(randomIndex)) << std::cout;
+		std::cout << std::format("Giving line {} from {} ({})", randomIndex, phraseFile, phrases.at(randomIndex)) << std::endl;
 		#endif
 	}
 
@@ -108,6 +109,36 @@ void vibe(const dpp::slashcommand_t& event) {
 	//Search by metric;
 	dpp::message msg = vibe::query(metric, value);
 	event.reply(msg);
+}
+
+
+
+void count(const dpp::slashcommand_t& event) {
+	//The user can see a graph of how many times a word has been said, over time.
+	std::string query = std::get<std::string>(event.get_parameter("query")); //What to search by
+	std::string value = std::get<std::string>(event.get_parameter("value")); //What to look for.
+
+	//Convert to lowercase.
+	utils::toLower(query);
+	utils::toLower(value);
+
+	std::unordered_map<types::Key, unsigned int, types::KeyHash> results;
+	if (query == "word") {
+		words::getWord(value, results);
+	} else if (query == "user") {
+		words::getUser(value, results);
+	} else {
+		event.reply(
+			dpp::message(std::format(
+"Unknown query: \"{}\". Looking for:\n- \"user\": *Messages sent by a certain person, takes username (e.g. Dau → \\_\\_dau\\_\\_)*\n- \"word\": *Old `/count` style, searches for a single word over time.*",
+			query
+		)).set_flags(dpp::m_ephemeral));
+		return;
+	}
+
+	#ifdef VERBOSE
+	std::cout << std::format("Query [{} == \"{}\"] returned [{}] results.\n", query, value, results.size()) << std::endl;
+	#endif
 }
 
 

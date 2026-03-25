@@ -24,6 +24,19 @@ void toLower(std::string& text) {
 	);
 }
 
+std::string getCurrentDate() {
+	auto now = std::chrono::system_clock::now();
+	auto days = floor<std::chrono::days>(now);
+	auto ymd = std::chrono::year_month_day(days);
+
+	return std::format(
+		"{:04}-{:02}-{:02}",
+		static_cast<int>(ymd.year()),
+		static_cast<unsigned int>(ymd.month()),
+		static_cast<unsigned int>(ymd.day())
+	);
+}
+
 }
 
 

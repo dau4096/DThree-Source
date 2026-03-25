@@ -93,6 +93,36 @@ struct Song {
 	std::vector<std::string> association; //Where is it from?
 };
 
+
+
+//For the word-occurrences CSV.
+struct Key {
+	std::string user;
+	std::string word;
+	std::string date;
+
+	Key(const std::string& u, const std::string& w, const std::string& d)
+		: user(u), word(w), date(d) {}
+
+	bool operator==(const Key& other) const {
+		return (
+			(user == other.user) && 
+			(date == other.date) && 
+			(word == other.word)
+		);
+	}
+};
+
+struct KeyHash {
+	std::size_t operator()(const Key& k) const {
+		return (
+			std::hash<std::string>()(k.user) ^
+			std::hash<std::string>()(k.word) ^
+			std::hash<std::string>()(k.date)
+		);
+	}
+};
+
 }
 
 

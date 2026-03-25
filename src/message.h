@@ -4,6 +4,9 @@
 
 
 #include "env.h"
+#include "words.h"
+
+
 
 
 namespace onMessage {
@@ -58,10 +61,17 @@ void inquisition(const dpp::message_create_t& event) {
 
 
 void logWords(const std::string& content, const std::string& username) {
-	//TBA
+	//Seperate into words, add to CSV.
+	std::string word;
+	std::stringstream stream = std::stringstream(content);
+	while (getline(stream, word, ' ')) {
+		words::incrementWord(username, word);
+	}
 }
 
 }
+
+
 
 
 #endif

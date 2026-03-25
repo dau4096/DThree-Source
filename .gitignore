@@ -1,4 +1,5 @@
 .env
 prgm
 *.o
-DISK/RWM/*
+out.txt
+*.log

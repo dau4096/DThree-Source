@@ -75,5 +75,6 @@ void init(void) {
 	srand(time(0)); //Randomise seed based on time.
 
 	xml::loadVibeXML(); //Load vibe/songData.xml
+	words::loadCSV(); //Load the wordOccurrences CSV file.
 	cmd::define(); //Add commands.
 }
