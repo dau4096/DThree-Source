@@ -127,6 +127,14 @@ void count(const dpp::slashcommand_t& event) {
 		words::getWord(value, results);
 	} else if (query == "user") {
 		words::getUser(value, results);
+		if (results.size() == 0u) {
+			event.reply(
+				dpp::message(std::format(
+"Could not find any data for \"{}\". Either this user has never said anything, or doesn't exist. Check your spelling and try again?",
+				query
+			)).set_flags(dpp::m_ephemeral));
+			return;
+		}
 	} else {
 		event.reply(
 			dpp::message(std::format(
@@ -139,6 +147,8 @@ void count(const dpp::slashcommand_t& event) {
 	#ifdef VERBOSE
 	std::cout << std::format("Query [{} == \"{}\"] returned [{}] results.\n", query, value, results.size()) << std::endl;
 	#endif
+
+	event.reply(std::format("Found {} results. Visuals TBA.", results.size()));
 }
 
 
@@ -174,8 +184,17 @@ static const std::vector<types::Command> commandList = {
 		"vibe", "Search for a song.",
 		"Either search for a specific song, or get a random selection. Search options (Metrics):\n- ID\n- name\n- artist\n- duration\n- genre\n- suggestedBy\n- intensity\n- mood\n- association\n- random",
 		cmdDefinition::vibe, {
-			dpp::command_option(dpp::co_string, "metric", "What metric to search by.", true),
+			dpp::command_option(dpp::co_string, "metric", "What metric to search by. [id|name|artist|~~duration~~|genre|suggestedBy|intensity|mood|association|random]", true),
 			dpp::command_option(dpp::co_string, "query", "The value to search for.", true)
+		}
+	),
+
+	types::Command(
+		"count", "Get data about words.",
+		"Either search via \"word\" (Replicates old system), or by \"user\" to see words said per day.",
+		cmdDefinition::count, {
+			dpp::command_option(dpp::co_string, "query", "What to search by [word|user]", true),
+			dpp::command_option(dpp::co_string, "value", "The value to search for.", true)
 		}
 	),
 };

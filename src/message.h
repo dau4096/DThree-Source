@@ -63,7 +63,9 @@ void inquisition(const dpp::message_create_t& event) {
 void logWords(const std::string& content, const std::string& username) {
 	//Seperate into words, add to CSV.
 	std::string word;
-	std::stringstream stream = std::stringstream(content);
+	std::string c = content;
+	std::replace(c.begin(), c.end(), '\n', ' ');
+	std::stringstream stream = std::stringstream(c);
 	while (getline(stream, word, ' ')) {
 		words::incrementWord(username, word);
 	}

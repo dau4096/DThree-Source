@@ -9,9 +9,13 @@
 #include "src/message.h"  //For what to do when a user sends a message.
 
 
+#define WAIT_MS 100u
+#define CSV_SAVE_MS 300e3 /* 300s / 5 minutes. */
 
 //Template
-void init();
+void init(void);
+void whileRunning(unsigned int callNumber);
+void shutdown(void);
 
 
 std::atomic<bool> D6isRunning = true;
@@ -71,12 +75,15 @@ int main() {
 	std::cout << "\nRunning D6..\n^C to exit." << std::endl;
 	D6.start(dpp::st_return); //Non-blocking
 
+	unsigned int callNumber = 0u;
 	do {
-	    std::this_thread::sleep_for(std::chrono::milliseconds(100)); //Check every 100ms.
+		whileRunning(callNumber++); //Run anything that needs to be periodically checked, like console input.
+	    std::this_thread::sleep_for(std::chrono::milliseconds(WAIT_MS)); //Check every 100ms.
 	} while (D6isRunning);
 
 	//Call proper shutdown.
 	D6.shutdown();
+	shutdown();
 	std::cout << std::endl;
 
 	return 0;
@@ -87,6 +94,7 @@ int main() {
 
 
 void init(void) {
+	//Initialise values, load files, etc.
 	std::signal(SIGINT, signalHandler); //Tell it to call that callback when ^C given.
 
 	env::load(); //Load .env file.
@@ -95,4 +103,22 @@ void init(void) {
 	xml::loadVibeXML(); //Load vibe/songData.xml
 	words::loadCSV(); //Load the wordOccurrences CSV file.
 	cmd::define(); //Add commands.
+}
+
+
+void whileRunning(unsigned int callNumber) {
+	//Tasks to perform roughly every {WAIT_MS}, such as occasionally saving files for safety or checking console input.
+	if (
+		(((int)(callNumber * WAIT_MS) % (int)(CSV_SAVE_MS)) == 0u) &&
+		(callNumber > 0u)
+	) {
+		//Periodically save the CSV files.
+		words::saveCSV();
+	}
+}
+
+
+void shutdown(void) {
+	//Shutdown properly, save files where needed, etc.
+	words::saveCSV();
 }

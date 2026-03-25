@@ -17,13 +17,13 @@ static std::unordered_map<types::Key, unsigned int, types::KeyHash> dataset = {}
 void loadCSV() {
 	//Loads wordOccurrences.csv into memory.
 	const std::string CSVpath = env::get("DISK_DIR") + "RWM/wordOccurrences.csv";
-	std::ifstream file = std::ifstream(CSVpath);
+	std::ifstream csv = std::ifstream(CSVpath);
 	
 	std::string unparsableLinesMessage = "[Unparsable wordOccurrences.csv lines}:\n";
 	
 	std::string line;
 	unsigned int lineNumber = 0u;
-	while (std::getline(file, line)) {
+	while (std::getline(csv, line)) {
 		if (lineNumber == 0u) {lineNumber++; continue; /* Header line, do not read. */}
 		try {
 		//Get each line in sequence.
@@ -50,6 +50,8 @@ void loadCSV() {
 		lineNumber++;
 	}
 
+	csv.close();
+
 #ifdef VERBOSE
 	std::cout << std::format("Successfully loaded [{}] datapoints from \"{}\"", lineNumber, CSVpath) << std::endl;
 #endif
@@ -64,6 +66,7 @@ void loadCSV() {
 
 
 std::string sanitiseWord(const std::string& word) {
+	//Clean up the word, stop it from being counted if certain criteria are met.
 	std::string result;
 	result.reserve(word.size());
 
@@ -74,6 +77,8 @@ std::string sanitiseWord(const std::string& word) {
 		}
 	}
 
+	utils::toLower(result);
+
 	return result;
 }
 
@@ -83,7 +88,7 @@ void incrementWord(const std::string& who, const std::string word) {
 	std::string sanWord = sanitiseWord(word);
 	unsigned int count;
 	if (sanWord.size() > 0u) {
-		types::Key key = types::Key(who, word, utils::getCurrentDate()); //Who, What, When.
+		types::Key key = types::Key(who, sanWord, utils::getCurrentDate()); //Who, What, When.
 		count = ++dataset[key]; //Increment.
 	} else {
 		count = 0u;
@@ -100,7 +105,20 @@ void incrementWord(const std::string& who, const std::string word) {
 
 
 void saveCSV() {
-	//TBA.
+	const std::string CSVpath = env::get("DISK_DIR") + "RWM/wordOccurrences.csv.TEMPORARY";
+	std::ofstream csv = std::ofstream(CSVpath);
+
+	//Write header
+	csv << "Name,Word,Date,Occurrences\n";
+
+	for (const auto& [key, count] : dataset) {
+		csv << std::format(
+			"{},{},{},{}\n",
+			key.user, key.word, key.date, count
+		);
+	}
+
+	csv.close();
 }
 
 
@@ -117,12 +135,15 @@ bool getWord(const std::string& query, std::unordered_map<types::Key, unsigned i
 }
 
 bool getUser(const std::string& query, std::unordered_map<types::Key, unsigned int, types::KeyHash>& result) {
-	//Get all entries attributed to some user.
+	//Get daily count attributed to some user.
 	for (const auto& [key, count] : dataset) {
 		if (key.user == query) {
-			result[key] = count;
+			//Convert to be counts per day. Index by some constant string, but with variable date.
+			types::Key newKey = types::Key(key.user, "<NONE>", key.date);
+			result[newKey] = count;
 		}
 	}
+
 	return result.size() > 0u;
 }
 
