@@ -12,6 +12,7 @@
 #include <cstring>
 #include <cmath>
 #include <ctime>
+#include <csignal>
 //////// C STD SUBHEADERS ////////
 
 
@@ -20,6 +21,7 @@
 #include <array>
 #include <unordered_map>
 #include <functional>
+#include <atomic>
 
 #include <string>
 #include <sstream>

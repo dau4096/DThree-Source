@@ -10,8 +10,16 @@
 
 
 
+//Template
 void init();
 
+
+std::atomic<bool> D6isRunning = true;
+void signalHandler(int signal) {
+	if (signal == SIGINT) {
+		D6isRunning = false;
+	}
+}
 
 
 int main() {
@@ -61,7 +69,15 @@ int main() {
 
 	//Run D6.
 	std::cout << "\nRunning D6..\n^C to exit." << std::endl;
-	D6.start(dpp::st_wait);
+	D6.start(dpp::st_return); //Non-blocking
+
+	do {
+	    std::this_thread::sleep_for(std::chrono::milliseconds(100)); //Check every 100ms.
+	} while (D6isRunning);
+
+	//Call proper shutdown.
+	D6.shutdown();
+	std::cout << std::endl;
 
 	return 0;
 }
@@ -71,7 +87,9 @@ int main() {
 
 
 void init(void) {
-	env::load();
+	std::signal(SIGINT, signalHandler); //Tell it to call that callback when ^C given.
+
+	env::load(); //Load .env file.
 	srand(time(0)); //Randomise seed based on time.
 
 	xml::loadVibeXML(); //Load vibe/songData.xml
