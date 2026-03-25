@@ -5,6 +5,7 @@
 
 #include "types.h"
 #include "utils.h"
+#include "graph.h"
 
 
 namespace words {
@@ -145,6 +146,11 @@ bool getUser(const std::string& query, std::unordered_map<types::Key, unsigned i
 	}
 
 	return result.size() > 0u;
+}
+
+
+void saveGraph(std::unordered_map<types::Key, unsigned int, types::KeyHash>& slice) {
+	
 }
 
 

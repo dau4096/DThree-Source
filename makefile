@@ -4,7 +4,7 @@ LDFLAGS = -I/usr/include -I/usr/local/include
 
 LIBS = -lpugixml -lm -ldl -pthread -ldpp -static-libstdc++ -static-libgcc
 
-SOURCES = main.cpp #Plus any extra C++ files.
+SOURCES = main.cpp src/font.cpp
 OBJECTS = $(SOURCES:.cpp=.o)
 
 all: prgm
