@@ -1,10 +1,12 @@
 /* font.h */
-#include "unordered_map"
+
+#include <unordered_map>
+#include <cassert>
 
 //8x8 font can be combined into single 64b bitmap.
-typedef uint64_t Glyph;
+namespace types {typedef uint64_t Glyph;}
 
-#define NUM_GLYPHS 64u
+#define NUM_GLYPHS 92u
 
 enum GlyphID {
 	//"Special" or punctuation
@@ -107,6 +109,10 @@ enum GlyphID {
 	G_9, //'9'
 };
 
+
+#ifndef FONT_H
+#define FONT_H
+
 const std::unordered_map<char, GlyphID> specialChars = {
 	{' ', G_SPACE},
 	{',', G_COMMA},
@@ -141,7 +147,7 @@ const std::unordered_map<char, GlyphID> specialChars = {
 
 namespace font {
 
-	extern const Glyph glyphs[NUM_GLYPHS];
+	extern const types::Glyph glyphs[NUM_GLYPHS];
 
 	static GlyphID asciiToGEnum(char ascii) {
 		//Maps ascii to the enum.
@@ -158,8 +164,12 @@ namespace font {
 		return G_UNKNOWN;
 	}
 
-	static const Glyph& getGlyph(char ascii) {
-		return glyphs[asciiToGEnum(ascii)];
+	static const types::Glyph& getGlyph(char ascii) {
+		GlyphID ID = asciiToGEnum(ascii);
+	    assert((ID >= 0) && (ID < NUM_GLYPHS));
+		return glyphs[ID];
 	}
 
 }
+
+#endif

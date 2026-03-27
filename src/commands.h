@@ -149,6 +149,9 @@ void count(const dpp::slashcommand_t& event) {
 	#endif
 
 	event.reply(std::format("Found {} results. Visuals TBA.", results.size()));
+
+
+	graph::drawWordsGraph(query, value, results);
 }
 
 

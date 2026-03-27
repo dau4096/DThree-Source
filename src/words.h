@@ -59,7 +59,7 @@ void loadCSV() {
 
 
 	//If unparsed lines were found. Clears file, if none were found.
-	std::ofstream logfile = std::ofstream("unparsable.log");
+	std::ofstream logfile = std::ofstream(env::get("DISK_DIR") + "/RWM/unparsable.log");
 	logfile << unparsableLinesMessage;
 	logfile.close();
 
@@ -87,18 +87,23 @@ std::string sanitiseWord(const std::string& word) {
 void incrementWord(const std::string& who, const std::string word) {
 	//Increments the occurrences of the value stored in the CSV.
 	std::string sanWord = sanitiseWord(word);
+#ifdef DEBUG_WORDS
 	unsigned int count;
+#endif
 	if (sanWord.size() > 0u) {
 		types::Key key = types::Key(who, sanWord, utils::getCurrentDate()); //Who, What, When.
+#ifdef DEBUG_WORDS
 		count = ++dataset[key]; //Increment.
 	} else {
 		count = 0u;
 	}
-#ifdef DEBUG_WORDS
 	std::cout << std::format(
 		"[{}] said \"{}\" → \"{}\", New count is [{}]",
 		who, word, sanWord, count
 	) << std::endl;
+#else
+		dataset[key]++; //Increment.
+	}
 #endif
 }
 
