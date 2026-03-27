@@ -111,7 +111,7 @@ void incrementWord(const std::string& who, const std::string word) {
 
 
 void saveCSV() {
-	const std::string CSVpath = env::get("DISK_DIR") + "RWM/wordOccurrences.csv.TEMPORARY";
+	const std::string CSVpath = env::get("DISK_DIR") + "RWM/wordOccurrences.csv";
 	std::ofstream csv = std::ofstream(CSVpath);
 
 	//Write header
@@ -151,11 +151,6 @@ bool getUser(const std::string& query, std::unordered_map<types::Key, unsigned i
 	}
 
 	return result.size() > 0u;
-}
-
-
-void saveGraph(std::unordered_map<types::Key, unsigned int, types::KeyHash>& slice) {
-	
 }
 
 

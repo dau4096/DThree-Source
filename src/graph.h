@@ -9,6 +9,12 @@
 
 namespace graph {
 
+	void wordsGraph(std::unordered_map<types::Key, unsigned int, types::KeyHash>& results) {
+		//Create a graph based on the results vector.
+		std::cout << "Number of results: " << results.size() << std::endl;
+	}
+
+
 	void drawWordsGraph(
 		const std::string& query, const std::string& value,
 		std::unordered_map<types::Key, unsigned int, types::KeyHash>& results
@@ -29,6 +35,7 @@ namespace graph {
 		}
 		draw::text(title, glm::ivec2(0, 0)); //Draw title at top left.
 
+		wordsGraph(results);
 
 		draw::saveBuffer(env::get("DISK_DIR") + "RWM/graph.png");
 	}

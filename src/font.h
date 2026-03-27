@@ -1,4 +1,5 @@
 /* font.h */
+#pragma once
 
 #include <unordered_map>
 #include <cassert>
@@ -110,9 +111,6 @@ enum GlyphID {
 };
 
 
-#ifndef FONT_H
-#define FONT_H
-
 const std::unordered_map<char, GlyphID> specialChars = {
 	{' ', G_SPACE},
 	{',', G_COMMA},
@@ -149,7 +147,7 @@ namespace font {
 
 	extern const types::Glyph glyphs[NUM_GLYPHS];
 
-	static GlyphID asciiToGEnum(char ascii) {
+	inline GlyphID asciiToGEnum(char ascii) {
 		//Maps ascii to the enum.
 		//Check ranges;
 		if ((ascii >= '0') && (ascii <= '9')) {return (GlyphID)(G_0 + (ascii - '0'));}
@@ -164,12 +162,12 @@ namespace font {
 		return G_UNKNOWN;
 	}
 
-	static const types::Glyph& getGlyph(char ascii) {
+	/*
+	inline const types::Glyph& getGlyph(char ascii) {
 		GlyphID ID = asciiToGEnum(ascii);
 	    assert((ID >= 0) && (ID < NUM_GLYPHS));
 		return glyphs[ID];
 	}
+	*/
 
 }
-
-#endif

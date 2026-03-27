@@ -84,8 +84,8 @@ static void artist(
 }
 
 static void duration(
-	const std::string& value, std::string& query,
-	std::vector<types::Song*>& results
+	const std::string&, std::string& query,
+	std::vector<types::Song*>&
 ) {
 	//UNDETERMINED:TBA
 	/*

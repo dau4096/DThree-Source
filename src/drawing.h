@@ -68,8 +68,8 @@ namespace draw {
 		//Position in pixel coordinates.
 		//Check bounds;
 		if (
-			((position.x < 0) || (position.x >= WIDTH_PX)) ||
-			((position.y < 0) || (position.y >= HEIGHT_PX))
+			((position.x < 0) || (position.x >= (int)(WIDTH_PX))) ||
+			((position.y < 0) || (position.y >= (int)(HEIGHT_PX)))
 		) {
 			return false; //OOB.
 		}
